@@ -1,7 +1,6 @@
 package com.example.localizacion_inalambrica.ui.home
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.localizacion_inalambrica.PermissionSafer
 import com.example.localizacion_inalambrica.R
@@ -44,7 +42,6 @@ class HomeFragment : Fragment() {
     }
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    @SuppressLint("MissingPermission")
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -54,7 +51,7 @@ class HomeFragment : Fragment() {
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        homeViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })
         fineLocationPermission.runWithPermission {

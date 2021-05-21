@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_start"
+    app:startDestination="@id/serverFragment">
+
+    <fragment
+        android:id="@+id/serverFragment"
+        android:name="com.example.localizacion_inalambrica.ui.start.ServerFragment"
+        android:label="fragment_server"
+        tools:layout="@layout/fragment_server" />
+</navigation>
