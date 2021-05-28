@@ -23,11 +23,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Localizacion_inalambrica"
-        tools:replace="android:theme"
-
-        android:usesCleartextTraffic="true"
         >
-        <!-- El permiso anterior es para permitir trafico http hacia parse-->
+        <activity android:name=".MainActivity2">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".RangingActivity"/>
+        <activity android:name=".MonitoringActivity">
+
+        </activity>
+
         <activity
             android:name=".StartActivity"
             android:label="@string/title_activity_start"
@@ -44,7 +52,7 @@
             android:theme="@style/Theme.Localizacion_inalambrica.NoActionBar">
 
         </activity>
-      
+
     </application>
 
 </manifest>
