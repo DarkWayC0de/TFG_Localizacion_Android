@@ -56,7 +56,6 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.3.4'
 
     //MY Lib
-    //implementation 'com.github.DarkWayC0de:BluetoothLib:v1.0.0-alpha'
     implementation 'org.altbeacon:android-beacon-library:2.17.1'
 
     // PARSE
@@ -76,6 +75,7 @@ dependencies {
     // for RxJava support (optional)
     implementation "com.github.parse-community.Parse-SDK-Android:rxjava:$parseVersion"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

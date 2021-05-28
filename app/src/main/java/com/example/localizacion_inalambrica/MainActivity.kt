@@ -20,10 +20,6 @@ import com.parse.ParseUser
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-    //TODO Add Lib
-    //val a = MyBluetoothLib()
-
     // Permisos
     // Permisos BluetoothBLE
 /*
