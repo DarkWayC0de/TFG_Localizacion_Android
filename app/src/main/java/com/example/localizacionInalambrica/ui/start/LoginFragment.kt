@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica.ui.start
+package com.example.localizacionInalambrica.ui.start
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,8 +10,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.localizacion_inalambrica.MainActivity
-import com.example.localizacion_inalambrica.R
+import com.example.localizacionInalambrica.MainActivity
+import com.example.localizacionInalambrica.R
 import com.parse.ParseUser
 
 
@@ -22,7 +22,7 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-
+        // TODO ROL guardado
         loginViewModel =
             ViewModelProvider(this).get(LoginViewModel::class.java)
         val root =inflater.inflate(R.layout.fragment_login, container, false)
@@ -39,11 +39,24 @@ class LoginFragment : Fragment() {
         if (currentUser != null) {
             saltaractividad()
         }
-
         return root
     }
 
     private fun login(user : String, pass :String) {
+        /*  TODO Default user
+        val user1 = ParseUser()
+        user1.username = "user1"
+        user1.setPassword("my pass")
+        user1.email = "email@example.com"
+        user1.signUpInBackground { e ->
+            if (e == null) {
+                // Hooray! Let them use the app now.
+                Toast.makeText(context,getString(R.string.loginsus),Toast.LENGTH_LONG).show()
+            } else {
+                // Sign up didn't succeed. Look at the ParseException
+                // to figure out what went wrong
+            }
+        }*/
         ParseUser.logInInBackground(user, pass) { userd, e ->
             if (userd != null) {
                 // Hooray! The user is logged in.

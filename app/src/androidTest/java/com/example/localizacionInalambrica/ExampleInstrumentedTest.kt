@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

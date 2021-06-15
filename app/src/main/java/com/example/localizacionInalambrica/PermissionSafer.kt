@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment

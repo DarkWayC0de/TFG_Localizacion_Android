@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica.ui.gallery
+package com.example.localizacionInalambrica.ui.gallery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

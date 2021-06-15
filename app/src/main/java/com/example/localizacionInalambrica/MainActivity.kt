@@ -1,6 +1,5 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
-import android.Manifest.permission.*
 import android.os.Bundle
 import android.view.Menu
 import android.widget.TextView

@@ -1,11 +1,10 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
 
 import android.app.Activity
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import org.altbeacon.beacon.*
 
 

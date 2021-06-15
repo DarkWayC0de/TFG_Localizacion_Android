@@ -1,9 +1,8 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.parse.Parse
@@ -44,4 +43,11 @@ class StartActivity : AppCompatActivity() {
         val actividad =  Intent(this,MainActivity::class.java)
          startActivity(actividad)
      }
+    external fun mio(): String
+    companion object {
+        // Used to load the 'native-lib' library on application startup.
+        init {
+            System.loadLibrary("native-lib")
+        }
+    }
 }

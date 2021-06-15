@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
 import android.content.Context
 import android.content.Intent

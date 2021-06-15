@@ -1,11 +1,9 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
 import android.app.Application
-import com.parse.Parse
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconParser
 import org.altbeacon.beacon.BeaconTransmitter
-import java.io.IOException
 import java.util.*
 
 
@@ -26,7 +24,14 @@ class App : Application() {
             .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25")
         val beaconTransmitter = BeaconTransmitter(applicationContext, beaconParser)
         beaconTransmitter.startAdvertising(beacon)
+
     }
-
-
+    external fun hola(): Int
+    external fun mio(): String
+    companion object {
+        // Used to load the 'native-lib' library on application startup.
+        init {
+            System.loadLibrary("native-lib")
+        }
+    }
 }

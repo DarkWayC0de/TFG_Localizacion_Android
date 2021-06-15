@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/serverFragment"
-        android:name="com.example.localizacion_inalambrica.ui.start.ServerFragment"
+        android:name="com.example.localizacionInalambrica.ui.start.ServerFragment"
         android:label="fragment_server"
         tools:layout="@layout/fragment_server" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.localizacion_inalambrica.ui.start.LoginFragment"
+        android:name="com.example.localizacionInalambrica.ui.start.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
 </navigation>

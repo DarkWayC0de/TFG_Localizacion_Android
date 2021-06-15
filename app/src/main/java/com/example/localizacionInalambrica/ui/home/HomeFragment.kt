@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica.ui.home
+package com.example.localizacionInalambrica.ui.home
 
 import android.Manifest
 import android.location.Location
@@ -10,9 +10,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.localizacion_inalambrica.PermissionSafer
-import com.example.localizacion_inalambrica.R
-import com.example.localizacion_inalambrica.toast
+import com.example.localizacionInalambrica.PermissionSafer
+import com.example.localizacionInalambrica.R
+import com.example.localizacionInalambrica.toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 

@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica.ui.start
+package com.example.localizacionInalambrica.ui.start
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -14,8 +14,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.localizacion_inalambrica.APLICATIONID
-import com.example.localizacion_inalambrica.R
+import com.example.localizacionInalambrica.APLICATIONID
+import com.example.localizacionInalambrica.R
 import com.parse.Parse
 import com.parse.ParseObject
 import com.parse.ParseQuery
@@ -72,8 +72,8 @@ class ServerFragment : Fragment() {
             )
             //TODO TEST CONECTIOn+
             /*val gameScore = ParseObject("Conf")
-            gameScore.put("live","1" )
-            gameScore.saveInBackground()*/
+            gameScore.put("live","2" )
+            gameScore.saveInBackground() */
 
             val query = ParseQuery.getQuery<ParseObject>("Conf")
             query.getInBackground("e0H1kDwiKC") { `object`, e ->

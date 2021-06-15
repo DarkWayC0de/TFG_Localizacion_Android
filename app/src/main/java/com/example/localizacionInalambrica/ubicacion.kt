@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
 import com.google.android.gms.location.LocationRequest
 

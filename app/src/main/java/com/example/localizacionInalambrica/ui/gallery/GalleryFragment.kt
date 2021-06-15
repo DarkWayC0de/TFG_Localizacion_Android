@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica.ui.gallery
+package com.example.localizacionInalambrica.ui.gallery
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.localizacion_inalambrica.R
+import com.example.localizacionInalambrica.R
 
 class GalleryFragment : Fragment() {
 

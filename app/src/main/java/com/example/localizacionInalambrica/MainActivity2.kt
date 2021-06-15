@@ -1,8 +1,7 @@
-package com.example.localizacion_inalambrica
+package com.example.localizacionInalambrica
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle

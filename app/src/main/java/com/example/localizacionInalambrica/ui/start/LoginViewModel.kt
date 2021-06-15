@@ -1,4 +1,4 @@
-package com.example.localizacion_inalambrica.ui.start
+package com.example.localizacionInalambrica.ui.start
 
 import androidx.lifecycle.ViewModel
 
