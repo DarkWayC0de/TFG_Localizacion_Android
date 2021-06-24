@@ -19,7 +19,8 @@ add_library( # Specifies the name of the library.
              # Provides a relative path to your source file(s).
         Chacha20-256-csprng.c
         Chaskey16_29bytes.c
-        hola.c)
+        hola.c
+        hola_jni.c)
 find_library(log-lib log)
 
 include_directories(include)

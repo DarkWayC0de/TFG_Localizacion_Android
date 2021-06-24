@@ -9,11 +9,12 @@ import java.util.*
 
 val APLICATIONID ="e0ef0e30-b8e6-11eb-8529-0242ac130003"
 
+
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
         val beacon = Beacon.Builder()
-            .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
+            .setId1(APLICATIONID)
             .setId2("1")
             .setId3("2")
             .setManufacturer(0x0118)
@@ -28,6 +29,7 @@ class App : Application() {
 
     }
     external fun adios():Int
+    external fun adios2(a : Int): Int
     companion object {
         // Used to load the 'cripto-lib' library on application startup.
         init {

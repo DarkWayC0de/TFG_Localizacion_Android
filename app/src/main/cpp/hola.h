@@ -4,7 +4,7 @@
 
 #ifndef LOCALIZACION_INALAMBRICA_HOLA_H
 #define LOCALIZACION_INALAMBRICA_HOLA_H
-#include <jni.h>
+
 int adios(int a);
 
 #endif //LOCALIZACION_INALAMBRICA_HOLA_H
