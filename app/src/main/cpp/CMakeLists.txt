@@ -11,16 +11,17 @@ cmake_minimum_required(VERSION 3.4.1)
 # automatically packages shared libraries with your APK.
 project("localizacion_inalambrica")
 add_library( # Specifies the name of the library.
-             native-lib
+             cripto-lib
 
              # Sets the library as a shared library.
              SHARED
 
              # Provides a relative path to your source file(s).
-        native-lib.c
-        native-lib.cpp)
+        Chacha20-256-csprng.c
+        Chaskey16_29bytes.c
+        hola.c)
 find_library(log-lib log)
 
 include_directories(include)
- target_link_libraries(native-lib
+target_link_libraries(cripto-lib
          ${log-lib})

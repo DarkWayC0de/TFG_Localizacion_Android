@@ -25,13 +25,21 @@ class App : Application() {
         val beaconTransmitter = BeaconTransmitter(applicationContext, beaconParser)
         beaconTransmitter.startAdvertising(beacon)
 
+
     }
-    external fun hola(): Int
+    external fun adios():Int
+    companion object {
+        // Used to load the 'cripto-lib' library on application startup.
+        init {
+            System.loadLibrary("cripto-lib")
+        }
+    }
+   /* external fun hola(): Int
     external fun mio(): String
     companion object {
         // Used to load the 'native-lib' library on application startup.
         init {
             System.loadLibrary("native-lib")
         }
-    }
+    }*/
 }
