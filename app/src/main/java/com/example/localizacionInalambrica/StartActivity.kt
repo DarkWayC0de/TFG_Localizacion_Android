@@ -43,11 +43,5 @@ class StartActivity : AppCompatActivity() {
         val actividad =  Intent(this,MainActivity::class.java)
          startActivity(actividad)
      }
-    external fun mio(): String
-    companion object {
-        // Used to load the 'native-lib' library on application startup.
-        init {
-            System.loadLibrary("native-lib")
-        }
-    }
+
 }

@@ -3,6 +3,7 @@ package com.example.localizacionInalambrica.ui.start
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -70,13 +71,10 @@ class ServerFragment : Fragment() {
                         .build()
                 }
             )
-            //TODO TEST CONECTIOn+
-            /*val gameScore = ParseObject("Conf")
-            gameScore.put("live","2" )
-            gameScore.saveInBackground() */
 
             val query = ParseQuery.getQuery<ParseObject>("Conf")
-            query.getInBackground("e0H1kDwiKC") { `object`, e ->
+            query.whereEqualTo("live","1")
+            query.findInBackground { response ,e ->
                 if (e == null) {
                     val sharedPref = context?.getSharedPreferences(
                         getString(R.string.preference_file_key), Context.MODE_PRIVATE)

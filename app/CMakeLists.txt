@@ -17,12 +17,12 @@ add_library( # Specifies the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-        Chacha20-256-csprng.c
-        Chaskey16_29bytes.c
-        hola.c
-        hola_jni.c)
+        src/main/cpp/Chacha20-256-csprng.c
+        src/main/cpp/Chaskey16_29bytes.c
+        src/main/cpp/hola.c
+        src/main/cpp/hola_jni.c)
 find_library(log-lib log)
 
-include_directories(include)
+include_directories(src/main/cpp/include)
 target_link_libraries(cripto-lib
          ${log-lib})
