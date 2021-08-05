@@ -13,23 +13,11 @@ val APLICATIONID ="e0ef0e30-b8e6-11eb-8529-0242ac130003"
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        val beacon = Beacon.Builder()
-            .setId1(APLICATIONID)
-            .setId2("1")
-            .setId3("2")
-            .setManufacturer(0x0118)
-            .setTxPower(-59)
-            .setDataFields(Arrays.asList(0L))
-            .build()
-        val beaconParser = BeaconParser()
-            .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25")
-        val beaconTransmitter = BeaconTransmitter(applicationContext, beaconParser)
-        beaconTransmitter.startAdvertising(beacon)
-
 
     }
     external fun adios():Int
     external fun adios2(a : Int): Int
+    external fun adios3():Int
     companion object {
         // Used to load the 'cripto-lib' library on application startup.
         init {

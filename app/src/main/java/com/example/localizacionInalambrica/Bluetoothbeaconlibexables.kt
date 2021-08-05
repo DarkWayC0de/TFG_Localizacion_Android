@@ -99,6 +99,9 @@ class RangingActivity : Activity(), BeaconConsumer {
                     "The first beacon I see is about " + beacons.iterator()
                         .next().distance + " meters away."
                 )
+                val bea= beacons.last()
+                val a = bea.dataFields
+                val b = a.size
             }
         }
         try {
@@ -115,10 +118,6 @@ class RangingActivity : Activity(), BeaconConsumer {
     }
 
     companion object {
-        protected const val TAG = "RangingActivity"
+        const val TAG = "RangingActivity"
     }
-}
-
-public class aaaa {
-
 }

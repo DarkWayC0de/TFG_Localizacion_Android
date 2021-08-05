@@ -23,6 +23,6 @@ add_library( # Specifies the name of the library.
         src/main/cpp/hola_jni.c)
 find_library(log-lib log)
 
-include_directories(src/main/cpp/include)
+include_directories(src/main/cpp)
 target_link_libraries(cripto-lib
          ${log-lib})
