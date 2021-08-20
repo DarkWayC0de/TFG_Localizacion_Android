@@ -1,7 +1,11 @@
 package com.example.localizacionInalambrica
 
+import android.Manifest.permission.*
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Filter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -29,16 +33,19 @@ class MainActivity : AppCompatActivity() {
     private val bluetoothAdminPermission = PermissionSafer(this,
         BLUETOOTH_ADMIN,
         onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") })
-    private val fineLocationPermission = PermissionSafer(this,
+        onShowRationale = { toast("Should show Rationale") }) */
+    private val fineLocationPermission = PermissionSaferMain(this,
         ACCESS_FINE_LOCATION,
-        onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") })
-    private val coarseLocationPermission = PermissionSafer(this,
+        onDenied = { toast("Permission Denied") }
+    ) { toast("Should show Rationale") }
+    private val coarseLocationPermission = PermissionSaferMain(this,
         ACCESS_COARSE_LOCATION,
-        onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") })
-*/
+        onDenied = { toast("Permission Denied") }
+    ) { toast("Should show Rationale") }
+    private val backgroundLocationPermission = PermissionSaferMain(this,
+        ACCESS_BACKGROUND_LOCATION,
+        onDenied = { toast("Permission Denied") }
+    ) { toast("Should show Rationale") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +82,23 @@ class MainActivity : AppCompatActivity() {
         username.text =user
         val correo : TextView = navheader.findViewById(R.id.correonav)
         correo.text = currentUser.email
-
+        startServiceGPS()
     }
+
+    private  fun startServiceGPS(){
+        fineLocationPermission.runWithPermission {
+          coarseLocationPermission.runWithPermission {
+              backgroundLocationPermission.runWithPermission {
+                  val receiver = LocationBroadcstReciver();
+                  val filter : IntentFilter = IntentFilter("ACT_LOC")
+                  registerReceiver(receiver,filter)
+                  val intent = Intent(this@MainActivity, serviceGPS::class.java)
+                  startService(intent)
+              }
+          }
+        }
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

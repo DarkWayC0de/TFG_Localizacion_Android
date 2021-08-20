@@ -17,11 +17,11 @@ class StartActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_start) as NavHostFragment
         val navController = navHostFragment.navController
 
-        pruebaAnterioLogueo()
+        pruebaAnteriorLogueo()
 
     }
 
-    private fun pruebaAnterioLogueo(){
+    private fun pruebaAnteriorLogueo(){
         val sharedPref = this.getSharedPreferences(
             getString(R.string.preference_file_key), Context.MODE_PRIVATE)!!
         val query = sharedPref.getString("serveraddr",null)

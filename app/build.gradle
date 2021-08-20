@@ -65,6 +65,8 @@ dependencies {
     //Permissions
     implementation 'androidx.activity:activity-ktx:1.2.3'
     implementation 'androidx.fragment:fragment-ktx:1.3.4'
+    //Ubicacion
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     //Beacon Lib
     implementation 'org.altbeacon:android-beacon-library:2.17.1'

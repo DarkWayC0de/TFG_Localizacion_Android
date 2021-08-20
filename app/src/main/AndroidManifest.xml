@@ -41,6 +41,8 @@
             android:theme="@style/Theme.Localizacion_inalambrica.NoActionBar">
 
         </activity>
+        <service android:name=".serviceGPS"/>
+        <receiver android:name=".LocationBroadcstReciver"/>
 
     </application>
 

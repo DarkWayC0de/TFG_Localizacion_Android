@@ -19,7 +19,6 @@ import com.google.android.gms.location.LocationServices
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconParser
 import org.altbeacon.beacon.BeaconTransmitter
-import java.util.*
 
 class HomeFragment : Fragment() {
     private val beaconParser = BeaconParser()
@@ -30,20 +29,20 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private val bluetoothPermission = PermissionSafer(this,
         Manifest.permission.BLUETOOTH,
-        onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") })
+        onDenied = { toast("Permission Denied") }
+    ) { toast("Should show Rationale") }
     private val bluetoothAdminPermission = PermissionSafer(this,
         Manifest.permission.BLUETOOTH_ADMIN,
-        onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") })
+        onDenied = { toast("Permission Denied") }
+    ) { toast("Should show Rationale") }
     private val fineLocationPermission = PermissionSafer(this,
         Manifest.permission.ACCESS_FINE_LOCATION,
-        onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") })
+        onDenied = { toast("Permission Denied") }
+    ) { toast("Should show Rationale") }
     private val coarseLocationPermission = PermissionSafer(this,
         Manifest.permission.ACCESS_COARSE_LOCATION,
-        onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") })
+        onDenied = { toast("Permission Denied") }
+    ) { toast("Should show Rationale") }
 
     private fun toast(s: String)
     {
@@ -76,6 +75,7 @@ class HomeFragment : Fragment() {
                     fineLocationPermission.runWithPermission {
                         coarseLocationPermission.runWithPermission {
                             toast("FUNCIONA")
+                            /*
                             fusedLocationClient.lastLocation
                                 .addOnSuccessListener { location : Location? ->
                                     // Got last known location. In some rare situations this can be null.
@@ -85,8 +85,8 @@ class HomeFragment : Fragment() {
                                         val string :String =      ((location.latitude/0.0001).toInt()).toString() +
                                                             "," + ((location.longitude/0.0001).toInt()).toString() +
                                                             "," + location.altitude.toInt().toString() +
-                                                            "," + ((location.bearing/0.001).toInt()).toString() +
-                                                            "," + ((location.speed/0.001).toInt()).toString()
+                                                            "," + ((location.bearing/0.1).toInt()).toString() +
+                                                            "," + ((location.speed/0.1).toInt()).toString()
                                         val a  = string.encodeToByteArray()
                                         val b = a.size
 
@@ -102,6 +102,7 @@ class HomeFragment : Fragment() {
                                     beaconTransmitter!!.startAdvertising(beacon)
                                     }
                                 }
+                            */
                         }
                     }
                 }
