@@ -1,15 +1,13 @@
 package com.example.localizacionInalambrica
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconParser
 import org.altbeacon.beacon.BeaconTransmitter
 import java.util.*
 
-
-val APLICATIONID ="e0ef0e30-b8e6-11eb-8529-0242ac130003"
-
-
+@HiltAndroidApp
 class App : Application() {
     override fun onCreate() {
         super.onCreate()

@@ -15,8 +15,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.localizacionInalambrica.APLICATIONID
 import com.example.localizacionInalambrica.R
+import com.example.localizacionInalambrica.other.Constants.APLICATIONID
 import com.parse.Parse
 import com.parse.ParseObject
 import com.parse.ParseQuery
