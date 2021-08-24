@@ -7,7 +7,6 @@ import org.altbeacon.beacon.BeaconTransmitter
 import java.util.*
 
 
-val APLICATIONID ="e0ef0e30-b8e6-11eb-8529-0242ac130003"
 
 
 class App : Application() {

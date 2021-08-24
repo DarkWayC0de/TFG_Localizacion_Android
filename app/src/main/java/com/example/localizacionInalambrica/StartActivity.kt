@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import com.example.localizacionInalambrica.other.Constants.APLICATIONID
 import com.parse.Parse
 import com.parse.ParseUser
 
@@ -12,7 +13,7 @@ class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
-
+        Parse.enableLocalDatastore(this)
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_start) as NavHostFragment
         val navController = navHostFragment.navController
