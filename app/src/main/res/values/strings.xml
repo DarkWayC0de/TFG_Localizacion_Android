@@ -33,5 +33,8 @@
     <string name="urlfail">La URL NO TIENE EL FORMATO ESPERADO</string>
     <string name="errosavepref">Error al guardar serveraddr en preferencias</string>
     <string name="noconection">NO hay coneccion con el servidor</string>
+    ***REMOVED***
+    <string name="tituloServicioRastreoNotificacion">Rastreando Ubicacion</string>
+    <string name="explicacion_permisos_ubicaion">Es necesario aceptar los permisos de ubicacion para el correcto funcionamiento del la aplicacion</string>
 
 </resources>
