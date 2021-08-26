@@ -7,6 +7,9 @@ import org.altbeacon.beacon.BeaconParser
 import org.altbeacon.beacon.BeaconTransmitter
 import java.util.*
 
+
+
+
 @HiltAndroidApp
 class App : Application() {
     override fun onCreate() {
