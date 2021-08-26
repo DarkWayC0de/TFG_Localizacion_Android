@@ -1,20 +1,15 @@
 package com.example.localizacionInalambrica
 
 import android.app.Application
+import com.parse.Parse
 import dagger.hilt.android.HiltAndroidApp
-import org.altbeacon.beacon.Beacon
-import org.altbeacon.beacon.BeaconParser
-import org.altbeacon.beacon.BeaconTransmitter
-import java.util.*
-
-
 
 
 @HiltAndroidApp
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-
+        Parse.enableLocalDatastore(this)
     }
     external fun adios():Int
     external fun adios2(a : Int): Int
