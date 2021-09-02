@@ -4,9 +4,9 @@ import android.content.Context
 import android.os.Build
 import pub.devrel.easypermissions.EasyPermissions
 
-object permissions {
+object Permissions {
     fun hastLocationPermissions(context: Context) =
-        if (Build.VERSION.SDK_INT<Build.VERSION_CODES.Q){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             EasyPermissions.hasPermissions(
                 context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION,

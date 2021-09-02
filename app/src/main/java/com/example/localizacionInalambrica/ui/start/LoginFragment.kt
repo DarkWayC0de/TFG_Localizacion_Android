@@ -1,6 +1,7 @@
 package com.example.localizacionInalambrica.ui.start
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,40 +10,37 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.localizacionInalambrica.MainActivity
 import com.example.localizacionInalambrica.R
 import com.parse.ParseUser
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
-    private lateinit var loginViewModel: LoginViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // TODO ROL guardado
-        loginViewModel =
-            ViewModelProvider(this).get(LoginViewModel::class.java)
+
         val root =inflater.inflate(R.layout.fragment_login, container, false)
         val button: Button = root.findViewById(R.id.login)
-        val usertex : EditText = root.findViewById(R.id.User)
-        val passtex : EditText = root.findViewById(R.id.Password)
-        button.setOnClickListener{
+        val usertex: EditText = root.findViewById(R.id.User)
+        val passtex: EditText = root.findViewById(R.id.Password)
+        button.setOnClickListener {
             val user = usertex.text.toString()
             val pass = passtex.text.toString()
-            login(user,pass)
+            login(user, pass)
 
-        }
-        val currentUser = ParseUser.getCurrentUser()
-        if (currentUser != null) {
-            saltaractividad()
         }
         return root
     }
 
-    private fun login(user : String, pass :String) {
+    @Inject
+    lateinit var sharedPref: SharedPreferences
+
+    private fun login(user: String, pass: String) {
         /*  TODO Default user
         val user1 = ParseUser()
         user1.username = "user1"
@@ -59,8 +57,21 @@ class LoginFragment : Fragment() {
         }*/
         ParseUser.logInInBackground(user, pass) { userd, e ->
             if (userd != null) {
-                // Hooray! The user is logged in.
-                Toast.makeText(context,getString(R.string.loginsus),Toast.LENGTH_LONG).show()
+                Toast.makeText(context, getString(R.string.loginsus), Toast.LENGTH_LONG).show()
+                // TODO GUARDAR PREDERENCIAS USUARIO , ROLL
+                val editor = sharedPref.edit()
+                editor.putString("userName", user)
+                editor.apply()
+                val userPref = sharedPref.getString("userName", null)
+                if (userPref != user) {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.error_save_pref_user),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+
                 saltaractividad()
             } else {
                Toast.makeText(context,getString(R.string.loginfail),Toast.LENGTH_LONG).show()
