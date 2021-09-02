@@ -1,14 +1,17 @@
 package com.example.localizacionInalambrica
 
-import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.example.localizacionInalambrica.other.Constants.APLICATIONID
 import com.parse.Parse
 import com.parse.ParseUser
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +24,11 @@ class StartActivity : AppCompatActivity() {
 
     }
 
-    private fun pruebaAnteriorLogueo(){
-        val sharedPref = this.getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE)!!
-        val query = sharedPref.getString("serveraddr",null)
-        if(query != null){
+    @Inject
+    lateinit var sharedPref: SharedPreferences
+    private fun pruebaAnteriorLogueo() {
+        val query = sharedPref.getString("serveraddr", null)
+        if (query != null) {
             Parse.initialize(
                 this.let {
                     Parse.Configuration.Builder(it)
@@ -39,9 +42,10 @@ class StartActivity : AppCompatActivity() {
             }
         }
     }
-     private fun iniciarapp(){
+
+    private fun iniciarapp(){
         val actividad =  Intent(this,MainActivity::class.java)
-         startActivity(actividad)
-     }
+        startActivity(actividad)
+    }
 
 }

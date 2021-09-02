@@ -24,14 +24,15 @@
     <string name="logo_app">LOGO APP</string>
     <string name="direccion_del_servidor">Direccion del servidor</string>
     <string name="boton_camara">Boton camara</string>
-    <string name="preference_file_key" >mypref</string>
+    <string name="preference_file_key">mypref</string>
     <string name="usuario">Usuario</string>
     <string name="contrase_a">Contraseña</string>
     <string name="login">Login</string>
     <string name="loginsus">Exito al iniciar secion</string>
     <string name="loginfail">Fallo al iniciar secion</string>
     <string name="urlfail">La URL NO TIENE EL FORMATO ESPERADO</string>
-    <string name="errosavepref">Error al guardar serveraddr en preferencias</string>
+    <string name="error_save_pref_server">Error al guardar serveraddr en preferencias</string>
+    <string name="error_save_pref_user">Error al guardar userName en preferencias</string>
     <string name="noconection">NO hay coneccion con el servidor</string>
     ***REMOVED***
     <string name="tituloServicioRastreoNotificacion">Rastreando Ubicacion</string>

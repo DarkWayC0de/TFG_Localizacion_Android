@@ -24,7 +24,7 @@ import com.example.localizacionInalambrica.other.Constants.LOCATION_UPDATE_INTER
 import com.example.localizacionInalambrica.other.Constants.NOTIFICATION_CHANEL_ID
 import com.example.localizacionInalambrica.other.Constants.NOTIFICATION_CHANEL_NAME
 import com.example.localizacionInalambrica.other.Constants.NOTIFICATION_ID
-import com.example.localizacionInalambrica.permisos.permissions
+import com.example.localizacionInalambrica.permisos.Permissions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -135,17 +135,17 @@ class ServicioRastreo : LifecycleService() {
     private fun updateLocationTracking(isTracking :Boolean){
 
         if(isTracking){
-           if(permissions.hastLocationPermissions(this)){
-            val request = LocationRequest().apply {
-                interval = LOCATION_UPDATE_INTERVAL
-                fastestInterval = FASTEST_LOCATION_INTERVAL
-                priority = PRIORITY_HIGH_ACCURACY
-            }
-             fusedLocationProviderClient.requestLocationUpdates(
-                 request,
-                 locationCallback,
-                 Looper.getMainLooper()
-             )
+            if (Permissions.hastLocationPermissions(this)) {
+                val request = LocationRequest().apply {
+                    interval = LOCATION_UPDATE_INTERVAL
+                    fastestInterval = FASTEST_LOCATION_INTERVAL
+                    priority = PRIORITY_HIGH_ACCURACY
+                }
+                fusedLocationProviderClient.requestLocationUpdates(
+                    request,
+                    locationCallback,
+                    Looper.getMainLooper()
+                )
            }
         } else {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
