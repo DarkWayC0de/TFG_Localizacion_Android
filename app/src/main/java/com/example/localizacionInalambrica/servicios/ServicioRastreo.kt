@@ -1,9 +1,7 @@
-package com.example.localizacionInalambrica.Servicios
+package com.example.localizacionInalambrica.servicios
 
 import android.annotation.SuppressLint
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.NotificationManager.IMPORTANCE_LOW
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
@@ -16,13 +14,12 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.localizacionInalambrica.R
-import com.example.localizacionInalambrica.other.Constants.ACTION_PAUSE_SERVICE
-import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE
-import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE
+import com.example.localizacionInalambrica.notification.Notification.crearNotificationChannel
+import com.example.localizacionInalambrica.other.Constants.ACTION_PAUSE_SERVICE_RASTREO
+import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE_RASTREO
+import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_RASTREO
 import com.example.localizacionInalambrica.other.Constants.FASTEST_LOCATION_INTERVAL
 import com.example.localizacionInalambrica.other.Constants.LOCATION_UPDATE_INTERVAL
-import com.example.localizacionInalambrica.other.Constants.NOTIFICATION_CHANEL_ID
-import com.example.localizacionInalambrica.other.Constants.NOTIFICATION_CHANEL_NAME
 import com.example.localizacionInalambrica.other.Constants.NOTIFICATION_ID
 import com.example.localizacionInalambrica.permisos.Permissions
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -74,22 +71,22 @@ class ServicioRastreo : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when(it.action){
-                ACTION_START_OR_RESUME_SERVICE->{
-                    if(isFirstRun){
+                ACTION_START_OR_RESUME_SERVICE_RASTREO -> {
+                    if (isFirstRun) {
                         starForegroundService()
                         isFirstRun = false
-                        Log.d(TAG,"Iniciado")
+                        Log.d(TAG, "Iniciado")
                     } else {
                         Log.d(TAG, "Recuperado")
                     }
 
                 }
-                ACTION_PAUSE_SERVICE->{
-                    Log.d( TAG,"ServicioRastreo Pausado")
+                ACTION_PAUSE_SERVICE_RASTREO -> {
+                    Log.d(TAG, "ServicioRastreo Pausado")
                     pauseService()
                 }
-                ACTION_STOP_SERVICE->{
-                    Log.d(TAG,"ServicioRastreo Terminado")
+                ACTION_STOP_SERVICE_RASTREO -> {
+                    Log.d(TAG, "ServicioRastreo Terminado")
                     killService()
                 }
 
@@ -113,7 +110,7 @@ class ServicioRastreo : LifecycleService() {
                 if (it != null && !serverKilled) {
                     val notification = actualNotificationBuilder
                         .setContentText(
-                            "Log: " + it!!.longitude.toString() + ", Lat: " + it.latitude.toString() + "\n"
+                            "Log: " + it.longitude.toString() + ", Lat: " + it.latitude.toString() + "\n"
                                     + "Alt: " + it.altitude.toString()
                         )
                     notificationManager.notify(NOTIFICATION_ID, notification.build())
@@ -134,9 +131,9 @@ class ServicioRastreo : LifecycleService() {
     @SuppressLint("MissingPermission")
     private fun updateLocationTracking(isTracking :Boolean){
 
-        if(isTracking){
-            if (Permissions.hastLocationPermissions(this)) {
-                val request = LocationRequest().apply {
+        if(isTracking) {
+            if (Permissions.hastLocationAndBluetoothPermissions(this)) {
+                val request = LocationRequest.create().apply {
                     interval = LOCATION_UPDATE_INTERVAL
                     fastestInterval = FASTEST_LOCATION_INTERVAL
                     priority = PRIORITY_HIGH_ACCURACY
@@ -146,7 +143,7 @@ class ServicioRastreo : LifecycleService() {
                     locationCallback,
                     Looper.getMainLooper()
                 )
-           }
+            }
         } else {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         }
@@ -156,10 +153,10 @@ class ServicioRastreo : LifecycleService() {
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
             if(isTracking.value!!){
-                result?.locations?.let{ locations ->
+                result.locations.let { locations ->
                     for (location in locations) {
                         modActualPosition(location)
-                        Log.d(TAG,"Nueva localizacion ${location.toString()}")
+                        Log.d(TAG, "Nueva localizacion ${location.toString()}")
                         //CAMBIAR  texto notificacion
 
                     }
@@ -170,14 +167,7 @@ class ServicioRastreo : LifecycleService() {
     }
 
 
-    private fun crearNotificationChannel(notificationmanager: NotificationManager) {
-        val channel = NotificationChannel(
-            NOTIFICATION_CHANEL_ID,
-            NOTIFICATION_CHANEL_NAME,
-            IMPORTANCE_LOW
-        )
-        notificationmanager.createNotificationChannel(channel)
-    }
+
 
     private fun actualizarNotificacionUbicacion(isTracking: Boolean) {
         val notificationActionText =
@@ -190,12 +180,12 @@ class ServicioRastreo : LifecycleService() {
         val pendingIntent =
             if (isTracking) {
                 val cerrarIntent = Intent(this, ServicioRastreo::class.java).apply {
-                    action = ACTION_STOP_SERVICE
+                    action = ACTION_STOP_SERVICE_RASTREO
                 }
                 PendingIntent.getService(this, 1, cerrarIntent, FLAG_UPDATE_CURRENT)
             } else {
                 val comenzarIntent = Intent(this, ServicioRastreo::class.java).apply {
-                    action = ACTION_START_OR_RESUME_SERVICE
+                    action = ACTION_START_OR_RESUME_SERVICE_RASTREO
                 }
                 PendingIntent.getService(this, 1, comenzarIntent, FLAG_UPDATE_CURRENT)
             }

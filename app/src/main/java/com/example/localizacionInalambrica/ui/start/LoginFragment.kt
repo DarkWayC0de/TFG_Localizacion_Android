@@ -55,7 +55,7 @@ class LoginFragment : Fragment() {
                 // to figure out what went wrong
             }
         }*/
-        ParseUser.logInInBackground(user, pass) { userd, e ->
+        ParseUser.logInInBackground(user, pass) { userd, _ ->
             if (userd != null) {
                 Toast.makeText(context, getString(R.string.loginsus), Toast.LENGTH_LONG).show()
                 // TODO GUARDAR PREDERENCIAS USUARIO , ROLL

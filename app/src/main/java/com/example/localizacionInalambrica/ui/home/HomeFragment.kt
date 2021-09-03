@@ -12,9 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.localizacionInalambrica.R
-import com.example.localizacionInalambrica.Servicios.ServicioRastreo
-import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE_RASTREO
+import com.example.localizacionInalambrica.other.Constants.ACTION_START_SERVICE_BLUETOOTH_RASTREADOR
 import com.example.localizacionInalambrica.other.Constants.DEFAULT_ZOOM
+import com.example.localizacionInalambrica.servicios.ServicioBluetooth
+import com.example.localizacionInalambrica.servicios.ServicioRastreo
 import com.example.localizacionInalambrica.toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -22,25 +24,12 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
-import org.altbeacon.beacon.BeaconParser
-import org.altbeacon.beacon.BeaconTransmitter
 
 class HomeFragment : Fragment() {
-    private val beaconParser = BeaconParser()
-        .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25")
 
     val contexts= this.context;
-    private var beaconTransmitter : BeaconTransmitter? = null
     private lateinit var homeViewModel: HomeViewModel
-   /* private val bluetoothPermission = PermissionSaferFragment(this,
-        Manifest.permission.BLUETOOTH,
-        onDenied = { toast("Permission Denied") }
-    ) { toast("Should show Rationale") }
-    private val bluetoothAdminPermission = PermissionSaferFragment(this,
-        Manifest.permission.BLUETOOTH_ADMIN,
-        onDenied = { toast("Permission Denied") }
-    ) { toast("Should show Rationale") }
-*/
+
     private fun toast(s: String)
     {
         context?.toast(s)
@@ -70,51 +59,14 @@ class HomeFragment : Fragment() {
             actualLocation()
         }
 
-        val buton:Button = root!!.findViewById(R.id.buttonpermisions)
+        val buton: Button = root!!.findViewById(R.id.buttonpermisions)
         buton.setOnClickListener {
 
 
         }
-            /*
-            bluetoothPermission.runWithPermission {
-                bluetoothAdminPermission.runWithPermission {
-                    fineLocationPermission.runWithPermission {
-                        coarseLocationPermission.runWithPermission {
-                            toast("FUNCIONA")
-                            /*
-                            fusedLocationClient.lastLocation
-                                .addOnSuccessListener { location : Location? ->
-                                    // Got last known location. In some rare situations this can be null.
-                                    toast(location.toString())
-                                    if(location!=null){
-                                    beaconTransmitter = BeaconTransmitter(context, beaconParser)
-                                        val string :String =      ((location.latitude/0.0001).toInt()).toString() +
-                                                            "," + ((location.longitude/0.0001).toInt()).toString() +
-                                                            "," + location.altitude.toInt().toString() +
-                                                            "," + ((location.bearing/0.1).toInt()).toString() +
-                                                            "," + ((location.speed/0.1).toInt()).toString()
-                                        val a  = string.encodeToByteArray()
-                                        val b = a.size
 
-                                    var array = arrayOf(2L,4L)
-                                    val beacon = Beacon.Builder()
-                                        .setId1(APLICATIONID)
-                                        .setId2("65535")            // 0 - 65535
-                                        .setId3("65535")            // 0 - 65535
-                                        .setManufacturer(0x0118)
-                                        .setTxPower(-59)
-                                        .setDataFields(array.toMutableList())
-                                        .build()
-                                    beaconTransmitter!!.startAdvertising(beacon)
-                                    }
-                                }
-                            */
-                        }
-                    }
-                }
-            }
-        } */
-        sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
+        sendCommandToService(ACTION_START_OR_RESUME_SERVICE_RASTREO, "Rastreo")
+        sendCommandToService(ACTION_START_SERVICE_BLUETOOTH_RASTREADOR)
         suscribeToObservers()
         return root
     }
@@ -139,7 +91,7 @@ class HomeFragment : Fragment() {
             }
             lastCircle = map?.addCircle(
                 CircleOptions()
-                    .center(LatLng(location!!.latitude,location!!.longitude))
+                    .center(LatLng(location!!.latitude, location!!.longitude))
                     .radius(2.0)
                     .strokeWidth(2f)
                     .strokeColor(Color.BLACK)
@@ -149,8 +101,12 @@ class HomeFragment : Fragment() {
 
         }
     }
-    fun sendCommandToService(action: String) =
-        Intent(requireContext(), ServicioRastreo::class.java).also {
+
+    fun sendCommandToService(action: String, service: String = "Bluetooth") =
+        Intent(
+            requireContext(),
+            if (service == "Rastreo") ServicioRastreo::class.java else ServicioBluetooth::class.java
+        ).also {
             it.action = action
             requireContext().startService(it)
         }

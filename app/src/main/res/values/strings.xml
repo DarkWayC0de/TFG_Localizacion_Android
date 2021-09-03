@@ -36,7 +36,7 @@
     <string name="noconection">NO hay coneccion con el servidor</string>
     <string name="google_maps_key" translatable="false">AIzaSyBdzDLgM3rLDKDb7Hu4HBBcAc1sS45hMpk</string>
     <string name="tituloServicioRastreoNotificacion">Rastreando Ubicacion</string>
-    <string name="explicacion_permisos_ubicaion">Es necesario aceptar los permisos de ubicacion para el correcto funcionamiento del la aplicacion</string>
+    <string name="explicacion_permisos_ubicaion">Es necesario aceptar los permisos de ubicacion y bluetooth para el correcto funcionamiento del la aplicacion</string>
     <string name="botonCerrarNotificacion">Cerrar</string>
     <string name="botonContinuarNotificacion">Comezar Seguimento</string>
 

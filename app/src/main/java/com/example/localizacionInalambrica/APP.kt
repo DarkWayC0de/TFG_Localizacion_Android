@@ -18,6 +18,7 @@ class App : Application() {
         super.onCreate()
         Parse.enableLocalDatastore(this)
         Log.d("APP", "Se llama onCREATE")
+
     }
 
     external fun adios(): Int
