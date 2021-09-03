@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun requestPermissions() {
-        if (Permissions.hastLocationPermissions(this)) {
+        if (Permissions.hastLocationAndBluetoothPermissions(this)) {
             return
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -151,7 +151,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 getString(R.string.explicacion_permisos_ubicaion),
                 REQUEST_CODE_LOCATION_PERMISSION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN
             )
         } else {
             EasyPermissions.requestPermissions(
@@ -160,7 +162,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 REQUEST_CODE_LOCATION_PERMISSION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN
             )
         }
     }

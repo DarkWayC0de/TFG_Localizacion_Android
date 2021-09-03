@@ -5,6 +5,7 @@ plugins {
 }
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 30
@@ -118,7 +119,7 @@ dependencies {
 
 
     //Beacon Lib
-    implementation 'org.altbeacon:android-beacon-library:2.17.1'
+    implementation 'org.altbeacon:android-beacon-library:2.19-beta5'
 
     // PARSE
     implementation "com.github.parse-community.Parse-SDK-Android:parse:$parseVersion"
