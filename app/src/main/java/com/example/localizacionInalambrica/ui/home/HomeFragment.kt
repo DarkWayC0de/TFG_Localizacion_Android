@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 
 class HomeFragment : Fragment() {
 
-    val contexts= this.context;
+    val contexts = this.context
     private lateinit var homeViewModel: HomeViewModel
 
     private fun toast(s: String)
@@ -65,8 +65,11 @@ class HomeFragment : Fragment() {
 
         }
 
-        sendCommandToService(ACTION_START_OR_RESUME_SERVICE_RASTREO, "Rastreo")
-        sendCommandToService(ACTION_START_SERVICE_BLUETOOTH_RASTREADOR)
+        sendCommandToService(ACTION_START_OR_RESUME_SERVICE_RASTREO, ServicioRastreo::class.java)
+        sendCommandToService(
+            ACTION_START_SERVICE_BLUETOOTH_RASTREADOR,
+            ServicioBluetooth::class.java
+        )
         suscribeToObservers()
         return root
     }
@@ -102,11 +105,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun sendCommandToService(action: String, service: String = "Bluetooth") =
-        Intent(
-            requireContext(),
-            if (service == "Rastreo") ServicioRastreo::class.java else ServicioBluetooth::class.java
-        ).also {
+    fun sendCommandToService(action: String, cls: Class<*>) =
+        Intent(requireContext(), cls).also {
             it.action = action
             requireContext().startService(it)
         }

@@ -46,6 +46,7 @@ class StartActivity : AppCompatActivity() {
     private fun iniciarapp(){
         val actividad =  Intent(this,MainActivity::class.java)
         startActivity(actividad)
+        finish()
     }
 
 }

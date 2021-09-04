@@ -14,7 +14,6 @@ import com.example.localizacionInalambrica.notification.Notification
 import com.example.localizacionInalambrica.other.Constants
 import com.example.localizacionInalambrica.other.Constants.BEACON_LAYOUT
 import com.example.localizacionInalambrica.other.Constants.NOTIFICATION_ID
-import com.example.localizacionInalambrica.other.Utility.decodeHex
 import com.example.localizacionInalambrica.permisos.Permissions
 import dagger.hilt.android.AndroidEntryPoint
 import org.altbeacon.beacon.*
@@ -28,11 +27,21 @@ class ServicioBluetooth : LifecycleService() {
     var modeRastreador = false
 
     @Inject
+    lateinit var region: Region
+
+    private lateinit var beaconTransmiter: BeaconTransmitter
+
+    @Inject
     lateinit var beaconManager: BeaconManager
 
     companion object {
 
         val servicerStarted = MutableLiveData<Boolean>()
+
+        // Used to load the 'cripto-lib' library on application startup.
+        init {
+            System.loadLibrary("cripto-lib")
+        }
     }
 
     @Inject
@@ -88,6 +97,10 @@ class ServicioBluetooth : LifecycleService() {
                     Log.d(TAG, " Terminado")
                     killService()
                 }
+                Constants.ACTION_STOP_SERVICE_NOTIFICATION -> {
+                    Log.d(TAG, " Terminado")
+                    killService()
+                }
 
                 else -> {
                 }
@@ -97,15 +110,28 @@ class ServicioBluetooth : LifecycleService() {
     }
 
     private fun resumeService() {
-        TODO("Not yet implemented")
+        if (modeRastreador) {
+            beaconManager.startRangingBeacons(region)
+        } else {
+            beaconTransmiter.startAdvertising()
+        }
     }
 
     private fun killService() {
-        TODO("Not yet implemented")
+        serverKilled = true
+        isFirstRun = true
+        pauseService()
+        modeRastreador = false
+        stopForeground(true)
+        stopSelf()
     }
 
     private fun pauseService() {
-        TODO("Not yet implemented")
+        if (modeRastreador) {
+            beaconManager.stopRangingBeacons(region)
+        } else {
+            beaconTransmiter.stopAdvertising()
+        }
     }
 
     private fun starForegroundService() {
@@ -118,7 +144,7 @@ class ServicioBluetooth : LifecycleService() {
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
 
         if (modeRastreador) {
-            startBluetoothRecive()
+            startBluetoothRecibe()
         } else {
             ServicioRastreo.actualPosition.observeForever(Observer {
                 if (it != null) {
@@ -128,12 +154,12 @@ class ServicioBluetooth : LifecycleService() {
         }
     }
 
-    private fun startBluetoothRecive() {
+    private fun startBluetoothRecibe() {
         if (Permissions.hastLocationAndBluetoothPermissions(this)) {
+
             beaconManager.setEnableScheduledScanJobs(false)
-            beaconManager.backgroundBetweenScanPeriod = 0;
-            beaconManager.backgroundScanPeriod = 1100;
-            val region = Region("region", null, Identifier.parse("65535"), null)
+            beaconManager.backgroundBetweenScanPeriod = 0
+            beaconManager.backgroundScanPeriod = 1100
             beaconManager.startRangingBeacons(region)
             val regionViewModel =
                 BeaconManager.getInstanceForApplication(this).getRegionViewModel(region)
@@ -145,45 +171,52 @@ class ServicioBluetooth : LifecycleService() {
         Log.d(TAG, "Ranged: ${beacons.count()} beacons")
         for (beacon: Beacon in beacons) {
             Log.d(TAG, "$beacon about ${beacon.distance} meters away")
-            val a = beacon.id1.toString()
-            val b = beacon.id2.toString()
-            val c = beacon.id3.toString()
-            val d = a + b + c
+            val msg = beacon.id1.toString()
+            val iduser = beacon.id3.toString()
 
         }
     }
 
-    private fun sendBluetooth(locate: Location) {
+    private fun sendBluetooth(location: Location) {
         if (Permissions.hastLocationAndBluetoothPermissions(this)) {
-            val h = "0f3e30f3e32132130f3e30f3e3213213"
-            val b: ByteArray = h.decodeHex()
-            /*var array = ByteArray(16)
-            val array1 = (locate.latitude/0.0001).toInt().toString().toByteArray(Charset.defaultCharset())
-            var a = 0
-            array1.forEach {
-                array[a++] = it
-            }
-            */
+            val msg = location_to_encode_and_encrypter(
+                (location.latitude / 0.0001).toInt(),
+                (location.longitude / 0.0001).toInt(),
+                location.altitude.toInt(),
+                (location.bearing / 0.1).toInt(),
+                (location.speed / 0.1).toInt()
+            )
+            val ideuser = "1" //TODO
             val beacon = Beacon.Builder()
-                .setId1(h)
+                .setId1(msg)
                 .setId2("65535")            // 0 - 65535
-                .setId3("65535")            // 0 - 65535
+                .setId3("iduser")            // 0 - 65535
                 .setManufacturer(0x0118)
                 .setTxPower(-59)
                 .setDataFields(arrayOf(0L).asList())
                 .build()
 
 
-            val beaconTransmiter = BeaconTransmitter(
+            beaconTransmiter = BeaconTransmitter(
                 applicationContext,
                 beaconManager.beaconParsers.first()
             )
             beaconTransmiter.startAdvertising(beacon)
 
+
         }
 
 
     }
+
+    external fun location_to_encode_and_encrypter(
+        longitud: Int,
+        latitud: Int,
+        altitud: Int,
+        bearing: Int,
+        speed: Int
+    ): String
+
 
     /***
      *
@@ -192,7 +225,7 @@ class ServicioBluetooth : LifecycleService() {
      *  val string :String =
      *  ((location.latitude/0.0001).toInt()).toString() +            90 - 0 - 90 esperado 900000       1 bit signo 20 numero entero 0 - 1048576
     "," + ((location.longitude/0.0001).toInt()).toString() +        180 - 0 - 180 esperado 1800000     1 bit signo 21 numero entero 0 - 2097152
-    "," + location.altitude.toInt().toString() +                    9000                               14 entero  0 - 16384
+    "," + location.altitude.toInt().toString() +                                           9000        14 entero  0 - 16384
     "," + ((location.bearing/0.1).toInt()).toString() +             0.0 - 360.0 esperado 3600          12 entero  0 - 4096
     "," + ((location.speed/0.1).toInt()).toString()                 0.0 - 12.0           120            7
      *                                                                                                 21 + 22 + 14 +12 +7 = 76      76/ 8 = 9.5 -> 10 Byte

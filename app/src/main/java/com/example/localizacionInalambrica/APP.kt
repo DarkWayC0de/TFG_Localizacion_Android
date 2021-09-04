@@ -10,6 +10,7 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {
+    private val TAG = "APP"
 
     @Inject
     lateinit var sharedPref: SharedPreferences
@@ -17,32 +18,17 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Parse.enableLocalDatastore(this)
-        Log.d("APP", "Se llama onCREATE")
+        Log.d(TAG, "Se llama onCREATE")
 
-    }
-
-    external fun adios(): Int
-    external fun adios2(a: Int): Int
-    external fun adios3(): Int
-
-    companion object {
-        // Used to load the 'cripto-lib' library on application startup.
-        init {
-            System.loadLibrary("cripto-lib")
-        }
-    }
-
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        Log.d("APP", "Se llama onLowMemory")
+        Log.d(TAG, "Se llama onLowMemory")
     }
 
     override fun onTerminate() {
         super.onTerminate()
-        Log.d("APP", "Se llama TErminate")
+        Log.d(TAG, "Se llama Terminate")
     }
 }

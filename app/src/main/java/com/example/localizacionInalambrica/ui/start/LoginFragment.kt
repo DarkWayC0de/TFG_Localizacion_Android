@@ -82,6 +82,7 @@ class LoginFragment : Fragment() {
     private fun saltaractividad(){
         val actividad =  Intent(context, MainActivity::class.java)
         startActivity(actividad)
+        requireActivity().finish()
     }
 
 

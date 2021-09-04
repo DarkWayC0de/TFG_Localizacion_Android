@@ -16,7 +16,11 @@ import androidx.lifecycle.Observer
 import com.example.localizacionInalambrica.R
 import com.example.localizacionInalambrica.notification.Notification.crearNotificationChannel
 import com.example.localizacionInalambrica.other.Constants.ACTION_PAUSE_SERVICE_RASTREO
+import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE_NOTIFICATION
 import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE_RASTREO
+import com.example.localizacionInalambrica.other.Constants.ACTION_START_SERVICE_BLUETOOTH_CLIENTE
+import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_BLUETOOTH
+import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_NOTIFICATION
 import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_RASTREO
 import com.example.localizacionInalambrica.other.Constants.FASTEST_LOCATION_INTERVAL
 import com.example.localizacionInalambrica.other.Constants.LOCATION_UPDATE_INTERVAL
@@ -89,8 +93,33 @@ class ServicioRastreo : LifecycleService() {
                     Log.d(TAG, "ServicioRastreo Terminado")
                     killService()
                 }
+                ACTION_STOP_SERVICE_NOTIFICATION -> {
+                    Log.d(TAG, "ServicioRastreo Notificacion terminar")
+                    sendCommandToService(
+                        ACTION_STOP_SERVICE_BLUETOOTH,
+                        ServicioBluetooth::class.java
+                    )
+                    sendCommandToService(ACTION_STOP_SERVICE_RASTREO, ServicioRastreo::class.java)
+                }
+                ACTION_START_OR_RESUME_SERVICE_NOTIFICATION -> {
+                    Log.d(TAG, "ServicioRastreo Notificacion Inicai Recupera")
+                    /** TODO if(user.rol){
+                    sendCommandToService(ACTION_START_SERVICE_BLUETOOTH_RASTREADOR,ServicioBluetooth::class.java)
+                    } else { */
+                    sendCommandToService(
+                        ACTION_START_SERVICE_BLUETOOTH_CLIENTE,
+                        ServicioBluetooth::class.java
+                    )
+                    // }
+                    sendCommandToService(
+                        ACTION_START_OR_RESUME_SERVICE_RASTREO,
+                        ServicioRastreo::class.java
+                    )
 
-                else -> {}
+                }
+
+                else -> {
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId)
@@ -156,7 +185,7 @@ class ServicioRastreo : LifecycleService() {
                 result.locations.let { locations ->
                     for (location in locations) {
                         modActualPosition(location)
-                        Log.d(TAG, "Nueva localizacion ${location.toString()}")
+                        Log.d(TAG, "Nueva localizacion $location")
                         //CAMBIAR  texto notificacion
 
                     }
@@ -180,12 +209,12 @@ class ServicioRastreo : LifecycleService() {
         val pendingIntent =
             if (isTracking) {
                 val cerrarIntent = Intent(this, ServicioRastreo::class.java).apply {
-                    action = ACTION_STOP_SERVICE_RASTREO
+                    action = ACTION_STOP_SERVICE_NOTIFICATION
                 }
                 PendingIntent.getService(this, 1, cerrarIntent, FLAG_UPDATE_CURRENT)
             } else {
                 val comenzarIntent = Intent(this, ServicioRastreo::class.java).apply {
-                    action = ACTION_START_OR_RESUME_SERVICE_RASTREO
+                    action = ACTION_START_OR_RESUME_SERVICE_NOTIFICATION
                 }
                 PendingIntent.getService(this, 1, comenzarIntent, FLAG_UPDATE_CURRENT)
             }
@@ -202,6 +231,13 @@ class ServicioRastreo : LifecycleService() {
             notificationManager.notify(NOTIFICATION_ID, actualNotificationBuilder.build())
         }
     }
+
+    fun sendCommandToService(action: String, cls: Class<*>) =
+        Intent(this, cls).also {
+            it.action = action
+            this.startService(it)
+        }
+
 
     private fun killService() {
         serverKilled = true

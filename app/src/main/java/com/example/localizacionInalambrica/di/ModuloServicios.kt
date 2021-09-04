@@ -15,6 +15,8 @@ import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ServiceScoped
 import org.altbeacon.beacon.BeaconManager
+import org.altbeacon.beacon.Identifier
+import org.altbeacon.beacon.Region
 
 
 @Module
@@ -59,5 +61,11 @@ object ModuloServicios {
     fun providerBeaconManager(
         @ApplicationContext app: Context,
     ) = BeaconManager.getInstanceForApplication(app)
+
+    @ServiceScoped
+    @Provides
+    fun providerRegion() =
+        Region("region", null, Identifier.parse("65535"), null)
+
 
 }
