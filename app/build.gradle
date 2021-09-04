@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id "androidx.navigation.safeargs.kotlin"
+    id "base"
 }
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
@@ -123,12 +124,7 @@ dependencies {
 
     // PARSE
     implementation "com.github.parse-community.Parse-SDK-Android:parse:$parseVersion"
-    // for Google login/signup support (optional)
-     implementation "com.github.parse-community.Parse-SDK-Android:google:$parseVersion"
-    // for Facebook login/signup support (optional)
-     implementation "com.github.parse-community.Parse-SDK-Android:facebook:$parseVersion"
-    // for Twitter login/signup support (optional)
-     implementation "com.github.parse-community.Parse-SDK-Android:twitter:$parseVersion"
+
     // for FCM Push support (optional)
      implementation "com.github.parse-community.Parse-SDK-Android:fcm:$parseVersion"
     // for Kotlin extensions support (optional)

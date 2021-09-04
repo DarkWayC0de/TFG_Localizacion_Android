@@ -30,17 +30,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    // Permisos
-    // Permisos BluetoothBLE
-/*
-    private val bluetoothPermission = PermissionSafer(this,
-        BLUETOOTH,
-        onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") })
-    private val bluetoothAdminPermission = PermissionSafer(this,
-        BLUETOOTH_ADMIN,
-        onDenied = { toast("Permission Denied") },
-        onShowRationale = { toast("Should show Rationale") }) */
     private var navController: NavController? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,6 +131,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun requestPermissions() {
+        Permissions.enablebluetooth(this)
+        Permissions.enableLocation(this)
         if (Permissions.hastLocationAndBluetoothPermissions(this)) {
             return
         }

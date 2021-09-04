@@ -25,13 +25,13 @@
         android:theme="@style/Theme.Localizacion_inalambrica"
         android:fullBackupContent="@xml/backup_descriptor"
         android:allowBackup="true">
-        <activity android:name="com.example.localizacionInalambrica.MainActivity2"/>
-        <activity android:name="com.example.localizacionInalambrica.RangingActivity"/>
-        <activity android:name="com.example.localizacionInalambrica.MonitoringActivity"/>
-        <activity android:launchMode="singleTask"
+
+        <activity
+            android:launchMode="singleTask"
             android:name="com.example.localizacionInalambrica.StartActivity"
             android:label="@string/title_activity_start"
-            android:theme="@style/Theme.Localizacion_inalambrica.NoActionBar">
+            android:theme="@style/Theme.Localizacion_inalambrica.NoActionBar"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
