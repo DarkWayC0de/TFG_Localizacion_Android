@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.localizacionInalambrica.R
 import com.example.localizacionInalambrica.other.Constants
 import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE_PARSE
@@ -36,7 +35,6 @@ import javax.inject.Inject
 class HomeFragment : Fragment() {
 
     val contexts = this.context
-    private lateinit var homeViewModel: HomeViewModel
 
     @Inject
     lateinit var sharedPref: SharedPreferences
@@ -56,8 +54,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
         root = inflater.inflate(R.layout.fragment_home, container, false)
         mapView = root!!.findViewById(R.id.mapView_home)
         /**tracking map **/

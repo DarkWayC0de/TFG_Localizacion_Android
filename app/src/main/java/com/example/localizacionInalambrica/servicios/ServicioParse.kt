@@ -97,11 +97,27 @@ class ServicioParse : LifecycleService() {
                             if (!beaconConsumer2.contains(iit)) {
                                 if (!beaconConsumer3.contains(iit)) {
                                     val nuevosdatos: ParseObject = ParseObject("Rastreo")
+                                    if (location != null) {
+                                        val ubicacionRastreador = ParseObject("Ubicacion")
+                                        ubicacionRastreador.put("Longitud", location.longitude)
+                                        ubicacionRastreador.put("Latitude", location.latitude)
+                                        ubicacionRastreador.put("Altitude", location.altitude)
+                                        ubicacionRastreador.put("Accuracy", location.accuracy)
+                                        ubicacionRastreador.put("Bearing", location.bearing)
+                                        ubicacionRastreador.put("Speed", location.speed)
+                                        ubicacionRastreador.put(
+                                            "ElapsedRealtime",
+                                            location.elapsedRealtimeNanos
+                                        )
+                                        ubicacionRastreador.put("Time", location.time)
+                                        ubicacionRastreador.put("Provider", location.provider)
+                                        ubicacionRastreador.saveEventually()
+                                        nuevosdatos.put("UbicacionRastreador", ubicacionRastreador)
+                                    }
                                     nuevosdatos.put("nMensaje", iit.dataFields.get(0))
                                     nuevosdatos.put("MensajeUsuario", iit.id1.toString())
                                     nuevosdatos.put("Rastreador", ParseUser.getCurrentUser())
                                     nuevosdatos.put("idUsuario", iit.id3.toString())
-                                    nuevosdatos.put("UbicacionRastreador", location.toString())
                                     nuevosdatos.put("Fecha", date)
                                     nuevosdatos.put("DistanciaBeacon", iit.distance)
                                     nuevosdatos.saveEventually()
