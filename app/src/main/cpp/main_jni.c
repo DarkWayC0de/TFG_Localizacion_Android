@@ -7,9 +7,12 @@
 JNIEXPORT jstring JNICALL
 Java_com_example_localizacionInalambrica_servicios_ServicioBluetooth_location_1to_1encode_1and_1encrypter(
         JNIEnv *env, jobject thiz, jint longitud, jint latitud, jint altitud, jint bearing,
-        jint speed) {
+        jint speed, jstring mackey, jstring cifradokey) {
+
+    const char *cmakey = (*env)->GetStringUTFChars(env, mackey, 0);
+    const char *ccifrado = (*env)->GetStringUTFChars(env, cifradokey, 0);
     const char *result = location_to_encode_and_encrypter(longitud, latitud, altitud, bearing,
-                                                          speed);
+                                                          speed, cmakey, ccifrado);
     jstring string = (*env)->NewStringUTF(env, result);
     return string;
 }

@@ -16,11 +16,12 @@ import androidx.lifecycle.Observer
 import com.example.localizacionInalambrica.R
 import com.example.localizacionInalambrica.notification.Notification.crearNotificationChannel
 import com.example.localizacionInalambrica.other.Constants.ACTION_PAUSE_SERVICE_RASTREO
-import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE_NOTIFICATION
+import com.example.localizacionInalambrica.other.Constants.ACTION_RESUME_SERVICE_BLUETOOTH
+import com.example.localizacionInalambrica.other.Constants.ACTION_RESUME_SERVICE_NOTIFICATION
 import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE_RASTREO
-import com.example.localizacionInalambrica.other.Constants.ACTION_START_SERVICE_BLUETOOTH_CLIENTE
 import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_BLUETOOTH
 import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_NOTIFICATION
+import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_PARSE
 import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_RASTREO
 import com.example.localizacionInalambrica.other.Constants.FASTEST_LOCATION_INTERVAL
 import com.example.localizacionInalambrica.other.Constants.LOCATION_UPDATE_INTERVAL
@@ -99,18 +100,25 @@ class ServicioRastreo : LifecycleService() {
                         ACTION_STOP_SERVICE_BLUETOOTH,
                         ServicioBluetooth::class.java
                     )
-                    sendCommandToService(ACTION_STOP_SERVICE_RASTREO, ServicioRastreo::class.java)
-                }
-                ACTION_START_OR_RESUME_SERVICE_NOTIFICATION -> {
-                    Log.d(TAG, "ServicioRastreo Notificacion Inicai Recupera")
-                    /** TODO if(user.rol){
-                    sendCommandToService(ACTION_START_SERVICE_BLUETOOTH_RASTREADOR,ServicioBluetooth::class.java)
-                    } else { */
                     sendCommandToService(
-                        ACTION_START_SERVICE_BLUETOOTH_CLIENTE,
+                        ACTION_STOP_SERVICE_RASTREO,
+                        ServicioRastreo::class.java
+                    )
+                    sendCommandToService(
+                        ACTION_STOP_SERVICE_PARSE,
+                        ServicioParse::class.java
+                    )
+                }
+                ACTION_RESUME_SERVICE_NOTIFICATION -> {
+                    Log.d(TAG, "ServicioRastreo Notificacion Inicai Recupera")
+                    sendCommandToService(
+                        ACTION_RESUME_SERVICE_BLUETOOTH,
                         ServicioBluetooth::class.java
                     )
-                    // }
+                    sendCommandToService(
+                        ACTION_START_OR_RESUME_SERVICE_RASTREO,
+                        ServicioRastreo::class.java
+                    )
                     sendCommandToService(
                         ACTION_START_OR_RESUME_SERVICE_RASTREO,
                         ServicioRastreo::class.java
@@ -126,6 +134,7 @@ class ServicioRastreo : LifecycleService() {
     }
     private fun starForegroundService() {
         isTracking.postValue(true)
+        serverKilled = false
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
                 as NotificationManager
@@ -214,7 +223,7 @@ class ServicioRastreo : LifecycleService() {
                 PendingIntent.getService(this, 1, cerrarIntent, FLAG_UPDATE_CURRENT)
             } else {
                 val comenzarIntent = Intent(this, ServicioRastreo::class.java).apply {
-                    action = ACTION_START_OR_RESUME_SERVICE_NOTIFICATION
+                    action = ACTION_RESUME_SERVICE_NOTIFICATION
                 }
                 PendingIntent.getService(this, 1, comenzarIntent, FLAG_UPDATE_CURRENT)
             }
