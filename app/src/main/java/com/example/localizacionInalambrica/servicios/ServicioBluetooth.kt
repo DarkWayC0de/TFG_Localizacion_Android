@@ -60,6 +60,7 @@ class ServicioBluetooth : LifecycleService() {
     private var macKey: String? = null
     private var cifradoKey: String? = null
     private var location: Location? = null
+    private var nPaquete: Long = 0L
 
     override fun onCreate() {
         super.onCreate()
@@ -180,9 +181,9 @@ class ServicioBluetooth : LifecycleService() {
             if (macKey == null) {
                 Log.d(TAG, "Error preferencia mackey32")
             }
-            cifradoKey = sharedPref.getString(Constants.PREFERENSES_CIFRADOKEY64, null)
+            cifradoKey = sharedPref.getString(Constants.PREFERENSES_CIFRADOKEY88, null)
             if (cifradoKey == null) {
-                Log.d(TAG, "Error preferencia CIFRADOKEY64")
+                Log.d(TAG, "Error preferencia CIFRADOKEY88")
             }
             ServicioRastreo.actualPosition.observeForever(Observer {
 
@@ -245,7 +246,8 @@ class ServicioBluetooth : LifecycleService() {
                 (location.bearing / 0.1).toInt(),
                 (location.speed / 0.1).toInt(),
                 mackey,
-                cifradokey
+                cifradokey,
+                if (nPaquete == 0L) 1 else 0
             )
 
             val beacon = Beacon.Builder()
@@ -254,9 +256,13 @@ class ServicioBluetooth : LifecycleService() {
                 .setId3(iduser)            // 0 - 65535
                 .setManufacturer(0x0118)
                 .setTxPower(-59)
-                .setDataFields(arrayOf(0L).asList())
+                .setDataFields(arrayOf(nPaquete).asList())
                 .build()
 
+            nPaquete++
+            if (nPaquete == 255L) {
+                nPaquete = 0
+            }
 
             beaconTransmiter = BeaconTransmitter(
                 applicationContext,
@@ -270,7 +276,6 @@ class ServicioBluetooth : LifecycleService() {
 
     }
 
-    //07vm6qtPC5
     external fun location_to_encode_and_encrypter(
         longitud: Int,
         latitud: Int,
@@ -278,7 +283,8 @@ class ServicioBluetooth : LifecycleService() {
         bearing: Int,
         speed: Int,
         mackey: String,
-        cifradokey: String
+        cifradokey: String,
+        reiniciaCifrado: Int
     ): String
 
 

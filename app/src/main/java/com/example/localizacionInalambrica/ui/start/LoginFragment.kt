@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.localizacionInalambrica.MainActivity
 import com.example.localizacionInalambrica.R
-import com.example.localizacionInalambrica.other.Constants.PREFERENSES_CIFRADOKEY64
+import com.example.localizacionInalambrica.other.Constants.PREFERENSES_CIFRADOKEY88
 import com.example.localizacionInalambrica.other.Constants.PREFERENSES_MACKEY32
 import com.example.localizacionInalambrica.other.Constants.PREFERENSES_USERID
 import com.example.localizacionInalambrica.other.Constants.PREFERENSES_USERNAME
@@ -89,7 +89,7 @@ class LoginFragment : Fragment() {
                     val respuesta = obj.first()
                     val userID = respuesta.getString("UserID")
                     val mackey = respuesta.getString("Mackey32")
-                    val cifradokey = respuesta.getString("CifradoKey64")
+                    val cifradokey = respuesta.getString("CifradoKey88")
                     editor.putString(PREFERENSES_USERID, userID)
                     editor.apply()
                     val userIDPref = sharedPref.getString(PREFERENSES_USERID, null)
@@ -102,11 +102,11 @@ class LoginFragment : Fragment() {
                     if (mackey != mackeyPref) {
                         Log.d(TAG, "Error al guardar la preferencia mackey32")
                     }
-                    editor.putString(PREFERENSES_CIFRADOKEY64, cifradokey)
+                    editor.putString(PREFERENSES_CIFRADOKEY88, cifradokey)
                     editor.apply()
-                    val cif64Pref = sharedPref.getString(PREFERENSES_CIFRADOKEY64, null)
-                    if (cifradokey != cif64Pref) {
-                        Log.d(TAG, "Error al guardar la preferencia CIFRADOKEY64")
+                    val cif88Pref = sharedPref.getString(PREFERENSES_CIFRADOKEY88, null)
+                    if (cifradokey != cif88Pref) {
+                        Log.d(TAG, "Error al guardar la preferencia CIFRADOKEY88")
                     }
                 }
 

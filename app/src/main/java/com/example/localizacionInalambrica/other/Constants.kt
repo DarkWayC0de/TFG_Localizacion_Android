@@ -43,7 +43,7 @@ object Constants {
     const val PREFERENSES_SERVERADDR = "serveraddr"
     const val PREFERENSES_USERID = "userID"
     const val PREFERENSES_MACKEY32 = "macKey32"
-    const val PREFERENSES_CIFRADOKEY64 = "cifradoKey64"
+    const val PREFERENSES_CIFRADOKEY88 = "cifradoKey88"
     const val PREFERENSES_USERROLE = "userRole"
 
 
