@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id "androidx.navigation.safeargs.kotlin"
     id "base"
+    id 'com.google.secrets_gradle_plugin' version '0.4'
 }
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'

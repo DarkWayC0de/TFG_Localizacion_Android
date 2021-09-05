@@ -31,7 +31,6 @@
     <string name="loginfail">Fallo al iniciar secion</string>
     <string name="urlfail">La URL NO TIENE EL FORMATO ESPERADO</string>
     <string name="noconection">NO hay coneccion con el servidor</string>
-    ***REMOVED***
     <string name="tituloServicioRastreoNotificacion">Rastreando Ubicacion</string>
     <string name="explicacion_permisos_ubicaion">Es necesario aceptar los permisos de ubicacion y bluetooth para el correcto funcionamiento del la aplicacion</string>
     <string name="botonCerrarNotificacion">Cerrar</string>
