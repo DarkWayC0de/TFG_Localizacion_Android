@@ -36,45 +36,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(
-                view,
-                "Replace with your own action",
-                Snackbar.LENGTH_LONG
-            )
-                .setAction("Action", null).show()
-        }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController!!, appBarConfiguration)
-        navView.setupWithNavController(navController!!)
-        val navheader = navView.getHeaderView(0)
-
-        // add user to menu
-        val currentUser = ParseUser.getCurrentUser()
-        val username: TextView = navheader.findViewById(R.id.usernamenav)
-        val user = currentUser.username
-        username.text = user
-        val correo: TextView = navheader.findViewById(R.id.correonav)
-        correo.text = currentUser.email
-
         requestPermissions()
-        navigateToHomeFragmentIfNeeded(intent)
-
-
 
         Log.d("MainActivity", "Se llama onCreate")
     }
@@ -127,6 +89,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun navigateToHomeFragmentIfNeeded(intent: Intent?) {
+
         if (intent?.action == ACTION_SHOW_HOME_FRAGMEWNT) {
             navController!!.navigate(R.id.nav_home)
         }
@@ -136,6 +99,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         Permissions.enablebluetooth(this)
         Permissions.enableLocation(this)
         if (Permissions.hastLocationAndBluetoothPermissions(this)) {
+            continuaStart()
             return
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -160,6 +124,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.BLUETOOTH_ADMIN
             )
         }
+
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
@@ -170,7 +135,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {}
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+
+        continuaStart()
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -180,5 +148,47 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
+
+    fun continuaStart() {
+        setContentView(R.layout.activity_main)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab.setOnClickListener { view ->
+            Snackbar.make(
+                view,
+                "Replace with your own action",
+                Snackbar.LENGTH_LONG
+            )
+                .setAction("Action", null).show()
+        }
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navController = findNavController(R.id.nav_host_fragment)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+            ), drawerLayout
+        )
+        setupActionBarWithNavController(navController!!, appBarConfiguration)
+        navView.setupWithNavController(navController!!)
+        val navheader = navView.getHeaderView(0)
+
+        // add user to menu
+        val currentUser = ParseUser.getCurrentUser()
+        val username: TextView = navheader.findViewById(R.id.usernamenav)
+        val user = currentUser.username
+        username.text = user
+        val correo: TextView = navheader.findViewById(R.id.correonav)
+        correo.text = currentUser.email
+
+
+        navigateToHomeFragmentIfNeeded(intent)
+
+    }
+
 
 }

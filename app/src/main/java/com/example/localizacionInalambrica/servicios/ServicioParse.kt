@@ -15,6 +15,7 @@ import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_P
 import com.parse.ParseObject
 import com.parse.ParseUser
 import dagger.hilt.android.AndroidEntryPoint
+import org.altbeacon.beacon.Beacon
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,6 +28,12 @@ class ServicioParse : LifecycleService() {
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
 
     lateinit var actualNotificationBuilder: NotificationCompat.Builder
+
+    private var beaconConsumer: Collection<Beacon> = listOf<Beacon>()
+    private var beaconConsumer1: Collection<Beacon> = listOf<Beacon>()
+    private var beaconConsumer2: Collection<Beacon> = listOf<Beacon>()
+    private var beaconConsumer3: Collection<Beacon> = listOf<Beacon>()
+
 
     override fun onCreate() {
         super.onCreate()
@@ -85,18 +92,30 @@ class ServicioParse : LifecycleService() {
                 val location = paircolectionandlocation.second
                 val beacons = paircolectionandlocation.first
                 beacons.forEach { iit ->
-                    val nuevosdatos: ParseObject = ParseObject("Rastreo")
-                    nuevosdatos.put("MensajeUsuario", iit.id1.toString())
-                    nuevosdatos.put("Rastreador", ParseUser.getCurrentUser())
-                    nuevosdatos.put("idUsuario", iit.id3.toString())
-                    nuevosdatos.put("UbicacionRastreador", location.toString())
-                    nuevosdatos.put("Fecha", date)
-                    nuevosdatos.put("DistanciaBeacon", iit.distance)
-                    nuevosdatos.saveEventually()
+                    if (!beaconConsumer.contains(iit)) {
+                        if (!beaconConsumer1.contains(iit)) {
+                            if (!beaconConsumer2.contains(iit)) {
+                                if (!beaconConsumer3.contains(iit)) {
+                                    val nuevosdatos: ParseObject = ParseObject("Rastreo")
+                                    nuevosdatos.put("nMensaje", iit.dataFields.get(0))
+                                    nuevosdatos.put("MensajeUsuario", iit.id1.toString())
+                                    nuevosdatos.put("Rastreador", ParseUser.getCurrentUser())
+                                    nuevosdatos.put("idUsuario", iit.id3.toString())
+                                    nuevosdatos.put("UbicacionRastreador", location.toString())
+                                    nuevosdatos.put("Fecha", date)
+                                    nuevosdatos.put("DistanciaBeacon", iit.distance)
+                                    nuevosdatos.saveEventually()
+                                }
+                            }
+                        }
+                    }
                 }
+                beaconConsumer3 = beaconConsumer2
+                beaconConsumer2 = beaconConsumer1
+                beaconConsumer1 = beaconConsumer
+                beaconConsumer = beacons
             }
         }
-
     }
 
     private fun pauseService() {

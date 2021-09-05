@@ -70,7 +70,10 @@ class ServicioBluetooth : LifecycleService() {
         beaconManager.beaconParsers.add(
             BeaconParser().setBeaconLayout(BEACON_LAYOUT)
         )
-
+        beaconTransmiter = BeaconTransmitter(
+            applicationContext,
+            beaconManager.beaconParsers.first()
+        )
 
     }
 
@@ -143,12 +146,13 @@ class ServicioBluetooth : LifecycleService() {
 
     private fun pauseService() {
         servicerStarted.postValue(false)
-        beaconManager.disableForegroundServiceScanning()
         if (modeRastreador) {
             beaconManager.stopRangingBeacons(region)
+            beaconManager.removeAllRangeNotifiers()
         } else {
             beaconTransmiter.stopAdvertising()
         }
+        beaconManager.disableForegroundServiceScanning()
     }
 
     private fun starForegroundService() {
@@ -247,27 +251,23 @@ class ServicioBluetooth : LifecycleService() {
                 (location.speed / 0.1).toInt(),
                 mackey,
                 cifradokey,
-                if (nPaquete == 0L) 1 else 0
+                nPaquete.toInt()
             )
-
+            val data = arrayOf(nPaquete).asList()
             val beacon = Beacon.Builder()
                 .setId1(msg)
                 .setId2("65535")            // 0 - 65535
                 .setId3(iduser)            // 0 - 65535
                 .setManufacturer(0x0118)
                 .setTxPower(-59)
-                .setDataFields(arrayOf(nPaquete).asList())
+                .setDataFields(data)
                 .build()
 
             nPaquete++
-            if (nPaquete == 255L) {
+            if (nPaquete == 256L) {
                 nPaquete = 0
             }
-
-            beaconTransmiter = BeaconTransmitter(
-                applicationContext,
-                beaconManager.beaconParsers.first()
-            )
+            beaconTransmiter.stopAdvertising()
             beaconTransmiter.startAdvertising(beacon)
 
 

@@ -232,12 +232,14 @@ int8_t *addMAC(int8_t msg[10], uint8_t k[16]) {
 
 int8_t *encriptar_msg(int8_t msgMac[16], uint8_t cifradokey[44], int reiniciaCifrado) {
     static int8_t msgEncryptado[16];
-    if (reiniciaCifrado == 1) {
+    if (reiniciaCifrado == 0) {
         uint8_t nonce[12];
         uint8_t key[32];
         for (int i = 0; i < 32; i++) {
             key[i] = cifradokey[i];
-            nonce[i] = cifradokey[32 + i];
+            if (i < 12) {
+                nonce[i] = cifradokey[32 + i];
+            }
         }
         chachaSeed(cifradokey, nonce);
     }
