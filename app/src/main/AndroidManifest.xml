@@ -51,6 +51,9 @@
         <service
             android:name=".servicios.ServicioRastreo"
             android:foregroundServiceType="location" />
+        <service
+            android:name=".servicios.ServicioParse"
+            android:foregroundServiceType="dataSync" />
 
         <meta-data
             android:name="com.google.android.gms.version"

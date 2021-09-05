@@ -2,7 +2,7 @@ package com.example.localizacionInalambrica.di
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import com.example.localizacionInalambrica.R
+import com.example.localizacionInalambrica.other.Constants.PREFERENSES_FILE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,5 +20,5 @@ object ModuloPreferenses {
     fun providerSharedPreferenses(
         @ApplicationContext app: Context
     ) =
-        app.getSharedPreferences(R.string.preference_file_key.toString(), MODE_PRIVATE)
+        app.getSharedPreferences(PREFERENSES_FILE, MODE_PRIVATE)
 }

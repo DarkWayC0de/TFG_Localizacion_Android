@@ -4,6 +4,7 @@ package com.example.localizacionInalambrica.servicios
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -17,6 +18,7 @@ import com.example.localizacionInalambrica.other.Constants.NOTIFICATION_ID
 import com.example.localizacionInalambrica.permisos.Permissions
 import dagger.hilt.android.AndroidEntryPoint
 import org.altbeacon.beacon.*
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,6 +27,9 @@ class ServicioBluetooth : LifecycleService() {
     private var isFirstRun = true
     private var serverKilled = false
     var modeRastreador = false
+
+    @Inject
+    lateinit var sharedPref: SharedPreferences
 
     @Inject
     lateinit var region: Region
@@ -38,6 +43,8 @@ class ServicioBluetooth : LifecycleService() {
 
         val servicerStarted = MutableLiveData<Boolean>()
 
+        val clientsLocations = MutableLiveData<Pair<Pair<Collection<Beacon>, Location?>, Date>>()
+
         // Used to load the 'cripto-lib' library on application startup.
         init {
             System.loadLibrary("cripto-lib")
@@ -49,6 +56,11 @@ class ServicioBluetooth : LifecycleService() {
 
     lateinit var actualNotificationBuilder: NotificationCompat.Builder
 
+    private var idUser: String? = null
+    private var macKey: String? = null
+    private var cifradoKey: String? = null
+    private var location: Location? = null
+
     override fun onCreate() {
         super.onCreate()
         actualNotificationBuilder = baseNotificationBuilder
@@ -57,6 +69,7 @@ class ServicioBluetooth : LifecycleService() {
         beaconManager.beaconParsers.add(
             BeaconParser().setBeaconLayout(BEACON_LAYOUT)
         )
+
 
     }
 
@@ -110,6 +123,7 @@ class ServicioBluetooth : LifecycleService() {
     }
 
     private fun resumeService() {
+        servicerStarted.postValue(true)
         if (modeRastreador) {
             beaconManager.startRangingBeacons(region)
         } else {
@@ -127,6 +141,8 @@ class ServicioBluetooth : LifecycleService() {
     }
 
     private fun pauseService() {
+        servicerStarted.postValue(false)
+        beaconManager.disableForegroundServiceScanning()
         if (modeRastreador) {
             beaconManager.stopRangingBeacons(region)
         } else {
@@ -136,17 +152,40 @@ class ServicioBluetooth : LifecycleService() {
 
     private fun starForegroundService() {
         servicerStarted.postValue(true)
+        serverKilled = false
+
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
                 as NotificationManager
 
         Notification.crearNotificationChannel(notificationManager)
-
+        beaconManager.enableForegroundServiceScanning(
+            baseNotificationBuilder.build(),
+            NOTIFICATION_ID
+        )
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
+        ServicioRastreo.actualPosition.observeForever(Observer {
+            if (it != null) {
+                location = it
+            }
+        })
 
         if (modeRastreador) {
             startBluetoothRecibe()
         } else {
+            idUser = sharedPref.getString(Constants.PREFERENSES_USERID, null)
+            if (idUser == null) {
+                Log.d(TAG, "Error preferencia userID")
+            }
+            macKey = sharedPref.getString(Constants.PREFERENSES_MACKEY32, null)
+            if (macKey == null) {
+                Log.d(TAG, "Error preferencia mackey32")
+            }
+            cifradoKey = sharedPref.getString(Constants.PREFERENSES_CIFRADOKEY64, null)
+            if (cifradoKey == null) {
+                Log.d(TAG, "Error preferencia CIFRADOKEY64")
+            }
             ServicioRastreo.actualPosition.observeForever(Observer {
+
                 if (it != null) {
                     sendBluetooth(it)
                 }
@@ -160,6 +199,8 @@ class ServicioBluetooth : LifecycleService() {
             beaconManager.setEnableScheduledScanJobs(false)
             beaconManager.backgroundBetweenScanPeriod = 0
             beaconManager.backgroundScanPeriod = 1100
+            beaconManager.foregroundBetweenScanPeriod = 0
+            beaconManager.foregroundScanPeriod = 1100
             beaconManager.startRangingBeacons(region)
             val regionViewModel =
                 BeaconManager.getInstanceForApplication(this).getRegionViewModel(region)
@@ -168,29 +209,49 @@ class ServicioBluetooth : LifecycleService() {
     }
 
     private val centralRangingObserver = Observer<Collection<Beacon>> { beacons ->
-        Log.d(TAG, "Ranged: ${beacons.count()} beacons")
-        for (beacon: Beacon in beacons) {
-            Log.d(TAG, "$beacon about ${beacon.distance} meters away")
-            val msg = beacon.id1.toString()
-            val iduser = beacon.id3.toString()
-
+        if (beacons.isNotEmpty()) {
+            clientsLocations.postValue(Pair(Pair(beacons, location), Date()))
+            Log.d(TAG, "Se detectan beacons")
         }
     }
 
     private fun sendBluetooth(location: Location) {
         if (Permissions.hastLocationAndBluetoothPermissions(this)) {
+            var iduser = ""
+            if (idUser == null) {
+                Log.d(TAG, "Error idUser es null")
+                killService()
+            } else {
+                iduser = idUser as String
+            }
+            var mackey = ""
+            if (macKey == null) {
+                Log.d(TAG, "Error macKey es null")
+                killService()
+            } else {
+                mackey = macKey as String
+            }
+            var cifradokey = ""
+            if (cifradoKey == null) {
+                Log.d(TAG, "Error cifradoKey es null")
+                killService()
+            } else {
+                cifradokey = cifradoKey as String
+            }
             val msg = location_to_encode_and_encrypter(
                 (location.latitude / 0.0001).toInt(),
                 (location.longitude / 0.0001).toInt(),
                 location.altitude.toInt(),
                 (location.bearing / 0.1).toInt(),
-                (location.speed / 0.1).toInt()
+                (location.speed / 0.1).toInt(),
+                mackey,
+                cifradokey
             )
-            val ideuser = "1" //TODO
+
             val beacon = Beacon.Builder()
                 .setId1(msg)
                 .setId2("65535")            // 0 - 65535
-                .setId3("iduser")            // 0 - 65535
+                .setId3(iduser)            // 0 - 65535
                 .setManufacturer(0x0118)
                 .setTxPower(-59)
                 .setDataFields(arrayOf(0L).asList())
@@ -209,12 +270,15 @@ class ServicioBluetooth : LifecycleService() {
 
     }
 
+    //07vm6qtPC5
     external fun location_to_encode_and_encrypter(
         longitud: Int,
         latitud: Int,
         altitud: Int,
         bearing: Int,
-        speed: Int
+        speed: Int,
+        mackey: String,
+        cifradokey: String
     ): String
 
 

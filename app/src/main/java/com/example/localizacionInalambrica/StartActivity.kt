@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.example.localizacionInalambrica.other.Constants.APLICATIONID
+import com.example.localizacionInalambrica.other.Constants.PREFERENSES_SERVERADDR
 import com.parse.Parse
 import com.parse.ParseUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +28,7 @@ class StartActivity : AppCompatActivity() {
     @Inject
     lateinit var sharedPref: SharedPreferences
     private fun pruebaAnteriorLogueo() {
-        val query = sharedPref.getString("serveraddr", null)
+        val query = sharedPref.getString(PREFERENSES_SERVERADDR, null)
         if (query != null) {
             Parse.initialize(
                 this.let {

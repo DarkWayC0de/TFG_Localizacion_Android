@@ -51,9 +51,9 @@ object Permissions {
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
         builder.setCancelable(false)
         builder.setPositiveButton("Yes",
-            DialogInterface.OnClickListener { dialog, id -> context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) })
+            DialogInterface.OnClickListener { _, _ -> context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) })
         builder.setNegativeButton("No",
-            DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+            DialogInterface.OnClickListener { dialog, _ -> dialog.cancel() })
         builder.show()
     }
 
@@ -64,7 +64,7 @@ object Permissions {
                 builder.setTitle("Bluetooth not enabled")
                 builder.setMessage("Please enable bluetooth in settings and restart this application.")
                 builder.setPositiveButton(R.string.ok,
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         context.startActivity(
                             Intent(
                                 Settings.ACTION_BLUETOOTH_SETTINGS
