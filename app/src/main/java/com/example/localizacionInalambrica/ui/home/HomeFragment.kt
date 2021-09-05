@@ -17,6 +17,7 @@ import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUM
 import com.example.localizacionInalambrica.other.Constants.ACTION_START_OR_RESUME_SERVICE_RASTREO
 import com.example.localizacionInalambrica.other.Constants.ACTION_START_SERVICE_BLUETOOTH_CLIENTE
 import com.example.localizacionInalambrica.other.Constants.ACTION_START_SERVICE_BLUETOOTH_RASTREADOR
+import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_NOTIFICATION
 import com.example.localizacionInalambrica.other.Constants.DEFAULT_ZOOM
 import com.example.localizacionInalambrica.servicios.ServicioBluetooth
 import com.example.localizacionInalambrica.servicios.ServicioParse
@@ -58,43 +59,51 @@ class HomeFragment : Fragment() {
         mapView = root!!.findViewById(R.id.mapView_home)
         /**tracking map **/
         mapView!!.onCreate(savedInstanceState)
-        mapView!!.getMapAsync{
+        mapView!!.getMapAsync {
             map = it
             actualLocation()
         }
-
-        val buton: Button = root!!.findViewById(R.id.buttonpermisions)
-        buton.setOnClickListener {
-
-
-        }
-
-        sendCommandToService(ACTION_START_OR_RESUME_SERVICE_RASTREO, ServicioRastreo::class.java)
         val userRolePref = sharedPref.getString(Constants.PREFERENSES_USERROLE, null)
         if (userRolePref == null) {
             ParseUser.logOut()
             requireActivity().finish()
         }
-        if (userRolePref == "Rastreador") {
-            sendCommandToService(
-                ACTION_START_SERVICE_BLUETOOTH_RASTREADOR,
-                ServicioBluetooth::class.java
-            )
-            sendCommandToService(
-                ACTION_START_OR_RESUME_SERVICE_PARSE,
-                ServicioParse::class.java
-            )
-        } else {
-            if (userRolePref == "Usuario") {
+        val buton: Button = root!!.findViewById(R.id.buttonpermisions)
+        buton.setOnClickListener {
+            if (!isTracking) {
                 sendCommandToService(
-                    ACTION_START_SERVICE_BLUETOOTH_CLIENTE,
-                    ServicioBluetooth::class.java
+                    ACTION_START_OR_RESUME_SERVICE_RASTREO,
+                    ServicioRastreo::class.java
                 )
+
+                if (userRolePref == "Rastreador") {
+                    sendCommandToService(
+                        ACTION_START_SERVICE_BLUETOOTH_RASTREADOR,
+                        ServicioBluetooth::class.java
+                    )
+                    sendCommandToService(
+                        ACTION_START_OR_RESUME_SERVICE_PARSE,
+                        ServicioParse::class.java
+                    )
+                } else {
+                    if (userRolePref == "Usuario") {
+                        sendCommandToService(
+                            ACTION_START_SERVICE_BLUETOOTH_CLIENTE,
+                            ServicioBluetooth::class.java
+                        )
+                    } else {
+                        ParseUser.logOut()
+                        requireActivity().finish()
+                    }
+                }
+                buton.text = getString(R.string.FinalizarRastreo)
             } else {
-                ParseUser.logOut()
-                requireActivity().finish()
+                sendCommandToService(ACTION_STOP_SERVICE_NOTIFICATION, ServicioRastreo::class.java)
+                buton.text = getString(R.string.ComenzarRastreo)
             }
+
         }
+        buton.text = getString(R.string.ComenzarRastreo)
 
         suscribeToObservers()
         return root

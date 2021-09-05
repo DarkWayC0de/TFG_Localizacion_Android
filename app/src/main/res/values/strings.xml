@@ -35,5 +35,7 @@
     <string name="explicacion_permisos_ubicaion">Es necesario aceptar los permisos de ubicacion y bluetooth para el correcto funcionamiento del la aplicacion</string>
     <string name="botonCerrarNotificacion">Cerrar</string>
     <string name="botonContinuarNotificacion">Comezar Seguimento</string>
+    <string name="FinalizarRastreo">Finalizar Rastreo</string>
+    <string name="ComenzarRastreo">Comenzar Rastreo</string>
 
 </resources>
