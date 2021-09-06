@@ -121,7 +121,7 @@ dependencies {
 
 
     //Beacon Lib
-    implementation 'org.altbeacon:android-beacon-library:2.19-beta5'
+    implementation 'org.altbeacon:android-beacon-library:2.19.2'
 
     // PARSE
     implementation "com.github.parse-community.Parse-SDK-Android:parse:$parseVersion"

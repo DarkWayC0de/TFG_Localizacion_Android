@@ -60,12 +60,12 @@ class ServicioParse : LifecycleService() {
 
                 }
                 ACTION_STOP_SERVICE_PARSE -> {
-                    Log.d(TAG, " Pausado")
-                    pauseService()
-                }
-                ACTION_PAUSE_SERVICE_PARSE -> {
                     Log.d(TAG, " Terminado")
                     killService()
+                }
+                ACTION_PAUSE_SERVICE_PARSE -> {
+                    Log.d(TAG, " Pausado")
+                    pauseService()
                 }
                 else -> {
 

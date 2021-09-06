@@ -87,15 +87,15 @@ class ServicioRastreo : LifecycleService() {
 
                 }
                 ACTION_PAUSE_SERVICE_RASTREO -> {
-                    Log.d(TAG, "ServicioRastreo Pausado")
+                    Log.d(TAG, "Pausado")
                     pauseService()
                 }
                 ACTION_STOP_SERVICE_RASTREO -> {
-                    Log.d(TAG, "ServicioRastreo Terminado")
+                    Log.d(TAG, "Terminado")
                     killService()
                 }
                 ACTION_STOP_SERVICE_NOTIFICATION -> {
-                    Log.d(TAG, "ServicioRastreo Notificacion terminar")
+                    Log.d(TAG, "Notificacion terminar")
                     sendCommandToService(
                         ACTION_STOP_SERVICE_BLUETOOTH,
                         ServicioBluetooth::class.java
@@ -110,7 +110,7 @@ class ServicioRastreo : LifecycleService() {
                     )
                 }
                 ACTION_RESUME_SERVICE_NOTIFICATION -> {
-                    Log.d(TAG, "ServicioRastreo Notificacion Inicai Recupera")
+                    Log.d(TAG, "Notificacion Inical Recupera")
                     sendCommandToService(
                         ACTION_RESUME_SERVICE_BLUETOOTH,
                         ServicioBluetooth::class.java
@@ -119,13 +119,8 @@ class ServicioRastreo : LifecycleService() {
                         ACTION_START_OR_RESUME_SERVICE_RASTREO,
                         ServicioRastreo::class.java
                     )
-                    sendCommandToService(
-                        ACTION_START_OR_RESUME_SERVICE_RASTREO,
-                        ServicioRastreo::class.java
-                    )
 
                 }
-
                 else -> {
                 }
             }
