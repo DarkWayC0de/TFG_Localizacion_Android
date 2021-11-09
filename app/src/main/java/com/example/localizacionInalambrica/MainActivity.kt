@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -17,11 +18,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.localizacionInalambrica.other.Constants.ACTION_SHOW_HOME_FRAGMEWNT
+import com.example.localizacionInalambrica.other.Constants.ACTION_STOP_SERVICE_NOTIFICATION
 import com.example.localizacionInalambrica.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.example.localizacionInalambrica.permisos.Permissions
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.localizacionInalambrica.servicios.ServicioRastreo
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.parse.ParseUser
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private fun navigateToHomeFragmentIfNeeded(intent: Intent?) {
 
         if (intent?.action == ACTION_SHOW_HOME_FRAGMEWNT) {
-            navController!!.navigate(R.id.nav_home)
+            navController!!.navigate(R.id.nav_rastreador)
         }
     }
 
@@ -154,41 +155,64 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(
-                view,
-                "Replace with your own action",
-                Snackbar.LENGTH_LONG
-            )
-                .setAction("Action", null).show()
-        }
+        val currentUser = ParseUser.getCurrentUser()
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
+        if (currentUser.get("role") == "Rastreador") {
+            appBarConfiguration = AppBarConfiguration(
+                setOf(
+                    R.id.nav_rastreador, R.id.nav_registro, R.id.nav_slideshow
+                ), drawerLayout
+            )
+        } else {
+            appBarConfiguration = AppBarConfiguration(
+                setOf(
+                    R.id.nav_rastreador
+                ), drawerLayout
+            )
+            //TODO ocultar boton de registro y slideshow del menu izquierdo
+        }
         setupActionBarWithNavController(navController!!, appBarConfiguration)
         navView.setupWithNavController(navController!!)
+
         val navheader = navView.getHeaderView(0)
 
+
         // add user to menu
-        val currentUser = ParseUser.getCurrentUser()
+
         val username: TextView = navheader.findViewById(R.id.usernamenav)
         val user = currentUser.username
         username.text = user
         val correo: TextView = navheader.findViewById(R.id.correonav)
         correo.text = currentUser.email
 
+        val boton: Button = navheader.findViewById(R.id.cerrar_sesion)
+        boton.setOnClickListener {
+
+            if (ServicioRastreo.isTracking.value == true) {
+                sendCommandToService(ACTION_STOP_SERVICE_NOTIFICATION, ServicioRastreo::class.java)
+            }
+            ParseUser.logOut()
+            val actividad = Intent(this, StartActivity::class.java)
+            startActivity(actividad)
+
+            finish()
+
+        }
+
 
         navigateToHomeFragmentIfNeeded(intent)
 
     }
 
+    fun sendCommandToService(action: String, cls: Class<*>) =
+        Intent(this, cls).also {
+            it.action = action
+            this.startService(it)
+        }
 
 }

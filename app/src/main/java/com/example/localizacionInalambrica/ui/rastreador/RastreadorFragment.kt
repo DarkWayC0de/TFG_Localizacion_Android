@@ -1,4 +1,4 @@
-package com.example.localizacionInalambrica.ui.home
+package com.example.localizacionInalambrica.ui.rastreador
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -33,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class RastreadorFragment : Fragment() {
 
     val contexts = this.context
 

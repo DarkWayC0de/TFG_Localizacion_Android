@@ -7,8 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_rastreador">Rastreador</string>
+    <string name="menu_registro">Registro</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_login">LoginActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -37,5 +37,19 @@
     <string name="botonContinuarNotificacion">Comezar Seguimento</string>
     <string name="FinalizarRastreo">Finalizar Rastreo</string>
     <string name="ComenzarRastreo">Comenzar Rastreo</string>
+    <string name="botonserviddor">Acceder</string>
+    <string name="Boton_cerrar_sesion">Cerrar sesion</string>
+    <string name="registrar_nuevo_usuario">Registrar nuevo usuario</string>
+    <string name="nombre_de_usuario">Nombre de usuario</string>
+    <string name="usuario_rastreador">Usuario Rastreador</string>
+    <string name="correo_opcional">Correo opcional</string>
+    <string name="registrar">Registrar</string>
+    <string name="Error_Usuario_en_registro">Registro no disponible para usuarios</string>
+    <string name="Error_Registro_usuario_muy_pequeño">Nombre de usuario muy pequeño</string>
+    <string name="Error_Registro_contrasena_muy_pequeño">Contraseña muy pequeña</string>
+    <string name="Exito_registro_usuario">"Se ha registrado correctamente al "</string>
+    <string name="Error_Registrar">Error al registrar usuario</string>
+    <string name="Error_Registro_Usuario_consultadatos">Error al registrar Usuario fallo Consulta</string>
+    <string name="Error_Registro_Usuario_guardardatos"> Error al registrar Usuario fallo datosRelativos </string>
 
 </resources>
