@@ -3,21 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
-    <action android:id="@+id/action_global_homeFragment"
-        app:destination="@id/nav_home"
+    app:startDestination="@+id/nav_rastreador">
+    <action
+        android:id="@+id/action_global_homeFragment"
+        app:destination="@id/nav_rastreador"
         app:launchSingleTop="true" />
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.localizacionInalambrica.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:id="@+id/nav_rastreador"
+        android:name="com.example.localizacionInalambrica.ui.rastreador.RastreadorFragment"
+        android:label="@string/menu_rastreador"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.localizacionInalambrica.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_registro"
+        android:name="com.example.localizacionInalambrica.ui.registro.RegistroFragment"
+        android:label="@string/menu_registro"
+        tools:layout="@layout/fragment_registro" />
 
     <fragment
         android:id="@+id/nav_slideshow"
