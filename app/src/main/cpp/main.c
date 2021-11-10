@@ -5,54 +5,46 @@
 #include "Chacha20-256-csprng.h"
 
 
-char *location_to_encode_and_encrypter(int longitud,
-                                       int latitud,
-                                       int altitud,
-                                       int bearing,
-                                       int speed,
-                                       char mackey[32],
-                                       char cifradokey[88],
-                                       int reiniciaCifrado
+void location_to_encode_and_encrypter(int longitud,
+                                      int latitud,
+                                      int altitud,
+                                      int bearing,
+                                      int speed,
+                                      char mackey[32],
+                                      char cifradokey[88],
+                                      int reiniciaCifrado,
+                                      char result[32]
 ) {
-    uint8_t *k; //TODOdd
-    k = decode_hex_char_array(mackey, 32);
     uint8_t fmackey[16];
-    for (int i = 0; i < 16; ++i) {
-        fmackey[i] = k[i];
-    }
-    k = decode_hex_char_array(cifradokey, 88);
     uint8_t fcifradokey[44];
-    for (int i = 0; i < 44; ++i) {
-        fcifradokey[i] = k[i];
-    }
+    uint8_t msg[10];
+    int8_t msgEncriptado[10];
+    int8_t msgMAC[16];
 
-    uint8_t *msg; //[10]
-    msg = encode_binary(longitud, latitud, altitud, bearing, speed);
+    decode_hex_char_array(mackey, 32, fmackey);
 
+    decode_hex_char_array(cifradokey, 88, fcifradokey);
 
-    int8_t *msgMAC; //[16]
-    msgMAC = addMAC(msg, fmackey);
+    encode_binary(longitud, latitud, altitud, bearing, speed, msg);
 
+    encriptar_msg(msg, fcifradokey, reiniciaCifrado, msgEncriptado);
 
-    int8_t *msgEncriptado; //[16]
-    msgEncriptado = encriptar_msg(msgMAC, fcifradokey, reiniciaCifrado);
+    addMAC(msgEncriptado, fmackey, msgMAC);
 
+    encode_hex_char_array(msgMAC, result);
 
-    char *msgfinal; //[32]
-    msgfinal = encode_hex_char_array(msgEncriptado);
-
-    return msgfinal;
 
 }
 
 
-uint8_t *encode_binary(int longitud, int latitud, int altitud, int bearing, int speed) {
+void
+encode_binary(int longitud, int latitud, int altitud, int bearing, int speed, uint8_t msg[10]) {
 /**
 *       signo longitud -         longitud       - signolatitud -          latitud         -     altitud      -    bearing    -  speed   - notuse
 *       |       0      - 0000000|00000000|00000 -       0      - 00|00000000|00000000|000 - 00000|00000000|0 - 0000000|00000 - 000|0000 - XXXX|
 * bytes              0              1                  2              3         4         5           6         7            8         9
 */
-    static uint8_t msg[10];
+
     char arrays[8];
     char *cslong = (negative(longitud) ? "1" : "0");
     char *clongituda = tobit((negative(longitud) ? longitud / -1 : longitud), 20);
@@ -167,8 +159,6 @@ uint8_t *encode_binary(int longitud, int latitud, int altitud, int bearing, int 
     arrays[6] = '0';
     arrays[7] = '0';
     msg[9] = chartouint8_t(arrays);
-
-    return msg;
 }
 
 uint8_t chartouint8_t(const char array[8]) {
@@ -209,8 +199,7 @@ bool negative(int i) {
     return (i < 0) ? true : false;
 }
 
-int8_t *addMAC(int8_t msg[10], uint8_t k[16]) {
-    static int8_t msgMAC[16];
+void addMAC(int8_t msgEncriptado[10], uint8_t k[16], int8_t msgMAC[16]) {
 
     uint32_t taglen = 6;
     uint8_t tag[6];
@@ -218,20 +207,18 @@ int8_t *addMAC(int8_t msg[10], uint8_t k[16]) {
     uint32_t k1[4], k2[4];
     subkeys(k1, k2, (uint32_t *) k);
 
-    chaskey(tag, taglen, msg, 10, (uint32_t *) k, k1, k2);
+    chaskey(tag, taglen, msgEncriptado, 10, (uint32_t *) k, k1, k2);
 
     for (int i = 0; i < 10; i++) {
         if (i < 6) {
             msgMAC[10 + i] = tag[i];
         }
-        msgMAC[i] = msg[i];
+        msgMAC[i] = msgEncriptado[i];
     }
-
-    return msgMAC;
 }
 
-int8_t *encriptar_msg(int8_t msgMac[16], uint8_t cifradokey[44], int reiniciaCifrado) {
-    static int8_t msgEncryptado[16];
+void encriptar_msg(int8_t msg[10], uint8_t cifradokey[44], int reiniciaCifrado,
+                   int8_t msgEncryptado[10]) {
     if (reiniciaCifrado == 0) {
         uint8_t nonce[12];
         uint8_t key[32];
@@ -243,32 +230,27 @@ int8_t *encriptar_msg(int8_t msgMac[16], uint8_t cifradokey[44], int reiniciaCif
         }
         chachaSeed(cifradokey, nonce);
     }
-    for (int i = 0; i < 16; ++i) {
-        msgEncryptado[i] = msgMac[i] ^ chachaGet();
+    for (int i = 0; i < 10; ++i) {
+        msgEncryptado[i] = msg[i] ^ chachaGet();
     }
-
-    return msgEncryptado;
 }
 
-char *encode_hex_char_array(const uint8_t msgEncriptado[16]) {
-    static char string[32];
+void encode_hex_char_array(const uint8_t msgMac[16], char string[32]) {
     static char hex[] = "0123456789ABCDEF";
     for (size_t i = 0; i < 16; i++) {
-        string[(i * 2) + 0] = hex[((msgEncriptado[i] & 0xF0) >> 4)];
-        string[(i * 2) + 1] = hex[((msgEncriptado[i] & 0x0F) >> 0)];
+        string[(i * 2) + 0] = hex[((msgMac[i] & 0xF0) >> 4)];
+        string[(i * 2) + 1] = hex[((msgMac[i] & 0x0F) >> 0)];
     }
-    return string;
 }
 
-uint8_t *decode_hex_char_array(char mackey[88], int i) {
-    uint8_t msgdecode[44];
+void decode_hex_char_array(char mackey[88], int i, uint8_t msgdecode[44]) {
     int k = 0;
     for (int j = 0; j < i / 2; ++j) {
         msgdecode[j] = (hexval(mackey[k + 1]));
         msgdecode[j] += (hexval(mackey[k]) * 16);
         k += 2;
     }
-    return msgdecode;
+
 }
 
 uint8_t hexval(char h) {
