@@ -111,7 +111,7 @@ class ServicioParse : LifecycleService() {
                                         )
                                         ubicacionRastreador.put("Time", location.time)
                                         ubicacionRastreador.put("Provider", location.provider)
-                                        ubicacionRastreador.saveEventually()
+                                        //ubicacionRastreador.saveEventually()
                                         nuevosdatos.put("UbicacionRastreador", ubicacionRastreador)
                                     }
                                     nuevosdatos.put("nMensaje", iit.dataFields.get(0))
