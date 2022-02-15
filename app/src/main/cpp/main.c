@@ -22,20 +22,146 @@ void location_to_encode_and_encrypter(int longitud,
     int8_t msgMAC[16];
 
     decode_hex_char_array(mackey, 32, fmackey);
+    printf("mackery ");
+    printArray(fmackey, 16);
 
     decode_hex_char_array(cifradokey, 88, fcifradokey);
+    printf("fcifradokey ");
+    printArray(fcifradokey, 44);
 
     encode_binary(longitud, latitud, altitud, bearing, speed, msg);
+    printf("mesaje ");
+    printArray(msg, 10);
 
     encriptar_msg(msg, fcifradokey, reiniciaCifrado, msgEncriptado);
+    printf("cifrado ");
+    printArray(msgEncriptado, 10);
 
     addMAC(msgEncriptado, fmackey, msgMAC);
+    printf("mac ");
+    printArray(msgMAC, 16);
 
-    encode_hex_char_array(msgMAC, result);
-
+    encode_hex_char_array(16, msgMAC, result);
 
 }
 
+void printArray(uint8_t array[], uint8_t sz) {
+    for (int i = 0; i < sz; i++) {
+        printf("%i", array[i]);
+    }
+    printf("\n");
+
+}
+
+void freeme(char *ptr) {
+    printf("\nfreeing address: %p\n", ptr);
+    free(ptr);
+}
+
+const char *descifrado(char *mackey, int mackey_sz,
+                       char *cifradokey, int cifradokey_sz,
+                       char *MensajeUsuario, int MensasjeUsuario_sz,
+                       int nMensaje) {
+    uint8_t fmackey[16];
+    uint8_t fcifradokey[44];
+    uint8_t fmensaje[16];
+    uint8_t mensajeencriptado[10];
+    uint8_t mac[6];
+    uint8_t n_mac[6];
+    uint8_t msgMAC[16];
+    uint8_t msg[10];
+    char result[20];
+    char *resultado = malloc(sizeof(char) * 20);
+    if (resultado == NULL) exit(1);
+    decode_hex_char_array(mackey, 32, fmackey);
+
+    printf("mackery ");
+    printArray(fmackey, 16);
+
+    decode_hex_char_array(cifradokey, 88, fcifradokey);
+    printf("fcifradokey ");
+    printArray(fcifradokey, 44);
+
+    decode_hex_char_array(MensajeUsuario, 32, fmensaje);
+    printf("mensaje inicial ");
+    printArray(fmensaje, 16);
+
+    for (int i = 0; i < 10; i++) {
+        mensajeencriptado[i] = fmensaje[i];
+        if (i < 6) {
+            mac[i] = fmensaje[10 + i];
+        }
+    }
+
+    addMAC(mensajeencriptado, fmackey, msgMAC);
+    printf("nuevo_mac ");
+    printArray(msgMAC, 16);
+
+    for (int i = 0; i < 6; i++) {
+        n_mac[i] = msgMAC[10 + i];
+    }
+
+    if (compareArray(mac, n_mac, 6) == 0) {
+
+        desencriptar_msg(mensajeencriptado, fcifradokey, nMensaje, msg);
+        printf("msg original ");
+        printArray(msg, 10);
+
+        encode_hex_char_array(10, msg, result);
+
+        strcpy(resultado, result);
+
+    } else {
+        result[0] = 'E';
+        result[1] = 'r';
+        result[2] = 'r';
+        result[3] = 'o';
+        result[4] = 'r';
+        result[5] = ' ';
+        result[3] = 'm';
+        result[4] = 'a';
+        result[5] = 'c';
+        strcpy(resultado, result);
+    }
+    printf("\npointer address: %p\n", resultado);
+
+    return resultado;
+}
+
+char compareArray(uint8_t array[], uint8_t array2[], uint8_t sz) {
+    int i;
+
+    for (i = 0; i < sz; i++) {
+        printf("\ncomparamos %i con %i", array[i], array2[i]);
+        if (array[i] != array2[i]) {
+            printf("\nfallo");
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void desencriptar_msg(int8_t msgEncryptado[10], uint8_t cifradokey[44], int nMensaje,
+                      int8_t msg[10]) {
+    uint8_t nonce[12];
+    uint8_t key[32];
+    for (int i = 0; i < 32; i++) {
+        key[i] = cifradokey[i];
+        if (i < 12) {
+            nonce[i] = cifradokey[32 + i];
+        }
+    }
+    chachaSeed(cifradokey, nonce);
+    for (int i = 0; i < nMensaje; i++) {
+        for (int i = 0; i < 10; ++i) {
+            char gastachacha;
+            gastachacha = gastachacha ^ chachaGet();
+        }
+    }
+    for (int i = 0; i < 10; ++i) {
+        msg[i] = msgEncryptado[i] ^ chachaGet();
+    }
+}
 
 void
 encode_binary(int longitud, int latitud, int altitud, int bearing, int speed, uint8_t msg[10]) {
@@ -235,9 +361,9 @@ void encriptar_msg(int8_t msg[10], uint8_t cifradokey[44], int reiniciaCifrado,
     }
 }
 
-void encode_hex_char_array(const uint8_t msgMac[16], char string[32]) {
+void encode_hex_char_array(int size, const uint8_t msgMac[size], char string[size * 2]) {
     static char hex[] = "0123456789ABCDEF";
-    for (size_t i = 0; i < 16; i++) {
+    for (size_t i = 0; i < size; i++) {
         string[(i * 2) + 0] = hex[((msgMac[i] & 0xF0) >> 4)];
         string[(i * 2) + 1] = hex[((msgMac[i] & 0x0F) >> 0)];
     }
