@@ -227,8 +227,8 @@ class ServicioBluetooth : LifecycleService() {
                 cifradokey = cifradoKey as String
             }
             val msg = location_to_encode_and_encrypter(
-                (location.latitude / 0.0001).toInt(),
                 (location.longitude / 0.0001).toInt(),
+                (location.latitude / 0.0001).toInt(),
                 location.altitude.toInt(),
                 (location.bearing / 0.1).toInt(),
                 (location.speed / 0.1).toInt(),
