@@ -22,39 +22,39 @@ void location_to_encode_and_encrypter(int longitud,
     int8_t msgMAC[16];
 
     decode_hex_char_array(mackey, 32, fmackey);
-    printf("mackery ");
-    printArray(fmackey, 16);
+    //printf("mackery ");
+    //printArray(fmackey, 16);
 
     decode_hex_char_array(cifradokey, 88, fcifradokey);
-    printf("fcifradokey ");
-    printArray(fcifradokey, 44);
+    //printf("fcifradokey ");
+    //printArray(fcifradokey, 44);
 
     encode_binary(longitud, latitud, altitud, bearing, speed, msg);
-    printf("mesaje ");
-    printArray(msg, 10);
+    //printf("mesaje ");
+    //printArray(msg, 10);
 
     encriptar_msg(msg, fcifradokey, reiniciaCifrado, msgEncriptado);
-    printf("cifrado ");
-    printArray(msgEncriptado, 10);
+    //printf("cifrado ");
+    //printArray(msgEncriptado, 10);
 
     addMAC(msgEncriptado, fmackey, msgMAC);
-    printf("mac ");
-    printArray(msgMAC, 16);
+    //printf("mac ");
+    //printArray(msgMAC, 16);
 
     encode_hex_char_array(16, msgMAC, result);
 
 }
 
-void printArray(uint8_t array[], uint8_t sz) {
+/*void printArray(uint8_t array[], uint8_t sz) {
     for (int i = 0; i < sz; i++) {
         printf("%i", array[i]);
     }
     printf("\n");
 
-}
+}*/
 
 void freeme(char *ptr) {
-    printf("\nfreeing address: %p\n", ptr);
+    //printf("\nfreeing address: %p\n", ptr);
     free(ptr);
 }
 
@@ -75,16 +75,16 @@ const char *descifrado(char *mackey, int mackey_sz,
     if (resultado == NULL) exit(1);
     decode_hex_char_array(mackey, 32, fmackey);
 
-    printf("mackery ");
-    printArray(fmackey, 16);
+    //printf("mackery ");
+    //printArray(fmackey, 16);
 
     decode_hex_char_array(cifradokey, 88, fcifradokey);
-    printf("fcifradokey ");
-    printArray(fcifradokey, 44);
+    //printf("fcifradokey ");
+    //printArray(fcifradokey, 44);
 
     decode_hex_char_array(MensajeUsuario, 32, fmensaje);
-    printf("mensaje inicial ");
-    printArray(fmensaje, 16);
+    //printf("mensaje inicial ");
+    //printArray(fmensaje, 16);
 
     for (int i = 0; i < 10; i++) {
         mensajeencriptado[i] = fmensaje[i];
@@ -94,8 +94,8 @@ const char *descifrado(char *mackey, int mackey_sz,
     }
 
     addMAC(mensajeencriptado, fmackey, msgMAC);
-    printf("nuevo_mac ");
-    printArray(msgMAC, 16);
+    //printf("nuevo_mac ");
+    //printArray(msgMAC, 16);
 
     for (int i = 0; i < 6; i++) {
         n_mac[i] = msgMAC[10 + i];
@@ -104,8 +104,8 @@ const char *descifrado(char *mackey, int mackey_sz,
     if (compareArray(mac, n_mac, 6) == 0) {
 
         desencriptar_msg(mensajeencriptado, fcifradokey, nMensaje, msg);
-        printf("msg original ");
-        printArray(msg, 10);
+        //printf("msg original ");
+        //printArray(msg, 10);
 
         encode_hex_char_array(10, msg, result);
 
@@ -123,7 +123,7 @@ const char *descifrado(char *mackey, int mackey_sz,
         result[5] = 'c';
         strcpy(resultado, result);
     }
-    printf("\npointer address: %p\n", resultado);
+    //printf("\npointer address: %p\n", resultado);
 
     return resultado;
 }
@@ -132,9 +132,9 @@ char compareArray(uint8_t array[], uint8_t array2[], uint8_t sz) {
     int i;
 
     for (i = 0; i < sz; i++) {
-        printf("\ncomparamos %i con %i", array[i], array2[i]);
+        //printf("\ncomparamos %i con %i", array[i], array2[i]);
         if (array[i] != array2[i]) {
-            printf("\nfallo");
+            //printf("\nfallo");
             return 1;
         }
     }

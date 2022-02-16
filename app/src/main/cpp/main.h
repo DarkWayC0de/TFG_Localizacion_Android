@@ -47,6 +47,6 @@ void desencriptar_msg(int8_t msgEncryptado[10], uint8_t cifradokey[44], int nMen
 
 char compareArray(uint8_t array[], uint8_t array2[], uint8_t sz);
 
-void printArray(uint8_t array[], uint8_t sz);
+//void printArray(uint8_t array[], uint8_t sz);
 
 #endif //LOCALIZACION_INALAMBRICA_MAIN_H
