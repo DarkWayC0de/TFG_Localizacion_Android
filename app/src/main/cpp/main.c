@@ -173,15 +173,15 @@ encode_binary(int longitud, int latitud, int altitud, int bearing, int speed, ui
 
     char arrays[8];
     char *cslong = (negative(longitud) ? "1" : "0");
-    char *clongituda = tobit((negative(longitud) ? longitud / -1 : longitud), 20);
-    char clongitud[20];
-    for (int i = 0; i < 20; ++i) {
+    char *clongituda = tobit((negative(longitud) ? longitud / -1 : longitud), 21);
+    char clongitud[21];
+    for (int i = 0; i < 21; ++i) {
         clongitud[i] = clongituda[i];
     }
     char *cslat = (negative(latitud) ? "1" : "0");
-    char *clatituda = tobit((negative(latitud) ? latitud / -1 : latitud), 21);
-    char clatitud[21];
-    for (int i = 0; i < 21; ++i) {
+    char *clatituda = tobit((negative(latitud) ? latitud / -1 : latitud), 20);
+    char clatitud[20];
+    for (int i = 0; i < 20; ++i) {
         clatitud[i] = clatituda[i];
     }
     char *caltituda = tobit(altitud, 14);
@@ -218,31 +218,31 @@ encode_binary(int longitud, int latitud, int altitud, int bearing, int speed, ui
     arrays[2] = clongitud[17];
     arrays[3] = clongitud[18];
     arrays[4] = clongitud[19];
-    arrays[5] = cslat[0];
-    arrays[6] = clatitud[0];
-    arrays[7] = clatitud[1];
+    arrays[5] = clongitud[20];
+    arrays[6] = cslat[0];
+    arrays[7] = clatitud[0];
     msg[2] = chartouint8_t(arrays);
-    arrays[0] = clatitud[2];
-    arrays[1] = clatitud[3];
-    arrays[2] = clatitud[4];
-    arrays[3] = clatitud[5];
-    arrays[4] = clatitud[6];
-    arrays[5] = clatitud[7];
-    arrays[6] = clatitud[8];
-    arrays[7] = clatitud[9];
+    arrays[0] = clatitud[1];
+    arrays[1] = clatitud[2];
+    arrays[2] = clatitud[3];
+    arrays[3] = clatitud[4];
+    arrays[4] = clatitud[5];
+    arrays[5] = clatitud[6];
+    arrays[6] = clatitud[7];
+    arrays[7] = clatitud[8];
     msg[3] = chartouint8_t(arrays);
-    arrays[0] = clatitud[10];
-    arrays[1] = clatitud[11];
-    arrays[2] = clatitud[12];
-    arrays[3] = clatitud[13];
-    arrays[4] = clatitud[14];
-    arrays[5] = clatitud[15];
-    arrays[6] = clatitud[16];
-    arrays[7] = clatitud[17];
+    arrays[0] = clatitud[9];
+    arrays[1] = clatitud[10];
+    arrays[2] = clatitud[11];
+    arrays[3] = clatitud[12];
+    arrays[4] = clatitud[13];
+    arrays[5] = clatitud[14];
+    arrays[6] = clatitud[15];
+    arrays[7] = clatitud[16];
     msg[4] = chartouint8_t(arrays);
-    arrays[0] = clatitud[18];
-    arrays[1] = clatitud[19];
-    arrays[2] = clatitud[20];
+    arrays[0] = clatitud[17];
+    arrays[1] = clatitud[18];
+    arrays[2] = clatitud[19];
     arrays[3] = caltitud[0];
     arrays[4] = caltitud[1];
     arrays[5] = caltitud[2];
