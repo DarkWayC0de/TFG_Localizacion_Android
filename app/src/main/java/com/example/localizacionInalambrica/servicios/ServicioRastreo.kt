@@ -143,8 +143,9 @@ class ServicioRastreo : LifecycleService() {
                 if (it != null && !serverKilled) {
                     val notification = actualNotificationBuilder
                         .setContentText(
-                            "Log: " + it.longitude.toString() + ", Lat: " + it.latitude.toString() + "\n"
-                                    + "Alt: " + it.altitude.toString()
+                            "Log: " + it.longitude.toString() + ", Lat: " + it.latitude.toString() + ", "
+                                    + "Alt: " + it.altitude.toString() + ",\n"
+                                    + " Bear: " + it.bearing.toString() + ", speed: " + it.speed.toString()
                         )
                     notificationManager.notify(NOTIFICATION_ID, notification.build())
                 }
